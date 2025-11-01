@@ -20,7 +20,7 @@
 }
 
 body {
-  background: var(--foreground);
+  background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -57,7 +57,7 @@ h6 {
   line-height: 1.45;
 }
 p {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.6;
 }
 
