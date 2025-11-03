@@ -220,7 +220,10 @@ const Header = () => {
             </div>
             {/* Card & Login */}
             <div className="flex items-center gap-6">
-              <button className="flex items-center gap-2 bg-[#E7000B] px-[16px] py-[8px] rounded-[8px] text-white font-medium">
+              <Link
+                href="/auth"
+                className="flex items-center gap-2 bg-[#E7000B] px-[16px] py-[8px] rounded-[8px] text-white font-medium"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1em"
@@ -233,7 +236,7 @@ const Header = () => {
                   />
                 </svg>
                 Đăng nhập
-              </button>
+              </Link>
               <button className="p-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

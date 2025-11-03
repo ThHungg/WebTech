@@ -1,17 +1,28 @@
+"use client";
 import { memo } from "react";
 import Header from "../Header";
 import Footer from "../Footer";
+import { usePathname } from "next/navigation";
 
-const MasterLayout = ({ children, ...props }: { children: React.ReactNode}) => {
+const MasterLayout = ({
+  children,
+  ...props
+}: {
+  children: React.ReactNode;
+}) => {
+  const pathname = usePathname();
+  if (pathname === "/auth") {
+    return <>{children}</>;
+  }
   return (
-  <div className="" {...props}>
-    <main>
+    <div className="" {...props}>
+      <main>
         <Header />
         {children}
         <Footer />
-    </main>
-  </div>
-  )
-}
+      </main>
+    </div>
+  );
+};
 
 export default memo(MasterLayout);
