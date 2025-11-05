@@ -186,7 +186,7 @@ const Header = () => {
                 className="w-[32px] h-[32px]"
               />
               <div>
-                <h3 className="bg-clip-text text-transparent bg-linear-to-r from-[#E80007] to-[#FF985E]">
+                <h3 className="bg-clip-text text-transparent bg-linear-to-r from-[#E80007] to-[#FF985E] font-bold">
                   TechWeb
                 </h3>
                 <p className=" text-gray-500 hidden md:block">

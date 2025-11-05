@@ -22,13 +22,13 @@ const Banner = () => {
             </div>
           </div>
           <div className="mb-[24px]">
-            <h1 className="mb-[16px]">Siêu Sale Công Nghệ 2024</h1>
-            <span className="">
+            <h1 className="mb-[16px] font-bold">Siêu Sale Công Nghệ 2024</h1>
+            <span className="font-medium">
               Giảm giá lên đến 50% • Trả góp 0% • Freeship toàn quốc • Bảo hành
               chính hãng
             </span>
           </div>
-          <div className="flex gap-5">
+          <div className="flex gap-5 font-medium">
             <button className="bg-white p-4 text-[#E66035] font-semibold rounded-xl shadow-2xl hover:scale-105 transition-transform">
               Khám phá ngay
             </button>
