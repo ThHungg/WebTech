@@ -2,8 +2,13 @@ import AboutBenefits from "@/components/Header/AboutBenefits";
 import Banner from "@/components/Header/Banner";
 import Link from "next/link";
 import { memo } from "react";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
+  const pathname = usePathname();
+  const hiddenBanner = ["/products/", "/cart", "/checkout"];
+  const isHideBanner = hiddenBanner.some((url) => pathname.startsWith(url));
+
   const menuList = [
     {
       icon: (
@@ -306,8 +311,8 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <Banner />
-      <AboutBenefits />
+      {!isHideBanner && <Banner />}
+      {!isHideBanner && <AboutBenefits />}
     </>
   );
 };

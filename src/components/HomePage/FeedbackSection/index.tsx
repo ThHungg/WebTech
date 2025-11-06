@@ -1,5 +1,5 @@
 import { memo } from "react";
-import FeedbackCard from "./FeedbackCard";
+import FeedbackCard from "../../Card/FeedbackCard";
 
 const FeedbackSection = () => {
   return (

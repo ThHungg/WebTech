@@ -6,12 +6,13 @@ interface StarRatingProps {
 }
 
 const StarRating = ({ rating = 5, maxStars = 5 }: StarRatingProps) => {
-  // Đảm bảo rating không âm và không vượt quá maxStars
-  const validRating = Math.max(0, Math.min(rating, maxStars));
+  // Đảm bảo maxStars và rating không âm
+  const validMaxStars = Math.max(1, maxStars);
+  const validRating = Math.max(0, Math.min(rating, validMaxStars));
 
   return (
     <div className="flex items-center gap-1">
-      {Array.from({ length: maxStars }).map((_, index) => (
+      {Array.from({ length: validMaxStars }).map((_, index) => (
         <svg
           key={index}
           xmlns="http://www.w3.org/2000/svg"

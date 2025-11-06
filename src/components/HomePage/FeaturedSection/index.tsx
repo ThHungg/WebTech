@@ -3,7 +3,7 @@ import { memo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import FeaturedCard from "./FeaturedCard";
+import FeaturedCard from "../../Card/FeaturedCard";
 import Link from "next/link";
 
 const FeaturedSection = () => {

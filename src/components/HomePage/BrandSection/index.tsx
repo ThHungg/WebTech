@@ -1,5 +1,5 @@
 import { memo } from "react";
-import BrandCard from "./BrandCard";
+import BrandCard from "../../Card/BrandCard";
 
 const BrandSection = () => {
   return (
