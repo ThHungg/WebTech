@@ -2,13 +2,8 @@ import AboutBenefits from "@/components/Header/AboutBenefits";
 import Banner from "@/components/Header/Banner";
 import Link from "next/link";
 import { memo } from "react";
-import { usePathname } from "next/navigation";
 
 const Header = () => {
-  const pathname = usePathname();
-  const hiddenBanner = ["/products/", "/cart", "/checkout"];
-  const isHideBanner = hiddenBanner.some((url) => pathname.startsWith(url));
-
   const menuList = [
     {
       icon: (
@@ -191,7 +186,7 @@ const Header = () => {
                 className="w-[32px] h-[32px]"
               />
               <div>
-                <h3 className="bg-clip-text text-transparent bg-linear-to-r from-[#E80007] to-[#FF985E] font-bold">
+                <h3 className="bg-clip-text text-transparent bg-linear-to-r from-[#E80007] to-[#FF985E]">
                   TechWeb
                 </h3>
                 <p className=" text-gray-500 hidden md:block">
@@ -311,8 +306,8 @@ const Header = () => {
           </div>
         </div>
       </header>
-      {!isHideBanner && <Banner />}
-      {!isHideBanner && <AboutBenefits />}
+      <Banner />
+      <AboutBenefits />
     </>
   );
 };
