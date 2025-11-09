@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { memo } from "react";
 
 const CategoryCard = () => {
@@ -19,7 +20,9 @@ const CategoryCard = () => {
             Gaming, văn phòng, đồ họa
           </p>
           <div className="flex items-center text-red-600 group-hover:text-[#E7000B]">
-            <span className="font-medium">Khám phá ngay</span>
+            <Link href="/listproduct/hung">
+              <span className="font-medium">Khám phá ngay</span>
+            </Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

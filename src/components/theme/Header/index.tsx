@@ -1,9 +1,16 @@
+"use client";
 import AboutBenefits from "@/components/Header/AboutBenefits";
 import Banner from "@/components/Header/Banner";
 import Link from "next/link";
-import { memo } from "react";
+import { memo, useState } from "react";
+import { usePathname } from "next/navigation";
+import CartSidebar from "@/components/CartSidebar";
 
 const Header = () => {
+  const [isOpenCartSidebar, setIsOpenCartSidebar] = useState(false);
+  const pathname = usePathname();
+  const hiddenBanner = ["/products/", "/cart", "/checkout"];
+  const isHideBanner = hiddenBanner.some((url) => pathname.startsWith(url));
   const menuList = [
     {
       icon: (
@@ -175,92 +182,100 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <header className="sticky top-0 z-40 shadow-xl bg-white">
-        <div className="max-w-7xl mx-auto px-[16px]">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <div className="flex items-center gap-3 py-4">
-              <img
-                src="https://png.pngtree.com/png-clipart/20250309/original/pngtree-logos-are-prohibited-red-logo-ban-vector-png-image_20615554.png"
-                alt=""
-                className="w-[32px] h-[32px]"
-              />
-              <div>
-                <h3 className="bg-clip-text text-transparent bg-linear-to-r from-[#E80007] to-[#FF985E]">
-                  TechWeb
-                </h3>
-                <p className=" text-gray-500 hidden md:block">
-                  Build Your Dream Setup
-                </p>
+      <header className="sticky top-0 z-40 shadow-md bg-white">
+        <div>
+          <div className="max-w-7xl mx-auto px-[16px]">
+            <div className="flex justify-between items-center">
+              {/* Logo */}
+              <div className="flex items-center gap-3 py-4">
+                <Link href="/">
+                  {" "}
+                  <img
+                    src="https://png.pngtree.com/png-clipart/20250309/original/pngtree-logos-are-prohibited-red-logo-ban-vector-png-image_20615554.png"
+                    alt=""
+                    className="w-[32px] h-[32px]"
+                  />
+                </Link>
+                <div>
+                  <h3 className="bg-clip-text text-transparent bg-linear-to-r from-[#E80007] to-[#FF985E] font-bold">
+                    TechWeb
+                  </h3>
+                  <p className=" text-gray-500 hidden md:block">
+                    Build Your Dream Setup
+                  </p>
+                </div>
               </div>
-            </div>
-            {/* Search */}
-            <div className="mx-[32px]">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Nhập sản phẩm cần tìm kiếm"
-                  className=" min-w-[400px] pl-[16px] py-[12px] pr-[48px] border-[1px] border-gray-400 rounded-2xl focus:border-2 hover:border-[#E7000B] focus:border-[#E7000B] focus:outline-none"
-                />
+              {/* Search */}
+              <div className="mx-[32px]">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Nhập sản phẩm cần tìm kiếm"
+                    className=" min-w-[400px] pl-[16px] py-[12px] pr-[48px] border-[1px] border-gray-400 rounded-2xl focus:border-2 hover:border-[#E7000B] focus:border-[#E7000B] focus:outline-none"
+                  />
 
-                <button className="absolute right-0 top-1/2 transform -translate-y-1/2 mr-4 text-white p-2 bg-[#E7000B] rounded-[12px]">
+                  <button className="absolute right-0 top-1/2 transform -translate-y-1/2 mr-4 text-white p-2 bg-[#E7000B] rounded-[12px]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39M11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              {/* Card & Login */}
+              <div className="flex items-center gap-6">
+                <Link
+                  href="/auth"
+                  className="flex items-center gap-2 bg-[#E7000B] px-[16px] py-[8px] rounded-[8px] text-white font-medium"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
+                    width="1em"
+                    height="1em"
                     viewBox="0 0 24 24"
                   >
                     <path
                       fill="currentColor"
-                      d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39M11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7"
+                      d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z"
                     />
+                  </svg>
+                  Đăng nhập
+                </Link>
+                <button
+                  onClick={() => setIsOpenCartSidebar(true)}
+                  className="p-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 32 32"
+                  >
+                    <g
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                    >
+                      <path d="M6 6h24l-3 13H9m18 4H10L5 2H2" />
+                      <circle cx="25" cy="27" r="2" />
+                      <circle cx="12" cy="27" r="2" />
+                    </g>
                   </svg>
                 </button>
               </div>
             </div>
-            {/* Card & Login */}
-            <div className="flex items-center gap-6">
-              <Link
-                href="/auth"
-                className="flex items-center gap-2 bg-[#E7000B] px-[16px] py-[8px] rounded-[8px] text-white font-medium"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z"
-                  />
-                </svg>
-                Đăng nhập
-              </Link>
-              <button className="p-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 32 32"
-                >
-                  <g
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                  >
-                    <path d="M6 6h24l-3 13H9m18 4H10L5 2H2" />
-                    <circle cx="25" cy="27" r="2" />
-                    <circle cx="12" cy="27" r="2" />
-                  </g>
-                </svg>
-              </button>
-            </div>
           </div>
+          <div className="h-[1px] bg-gray-200 w-full"></div>
         </div>
-        <div className="h-[1px] bg-gray-200 w-full"></div>
         <div className="max-w-7xl mx-auto px-[16px]">
           <div className="py-[8px] flex justify-between">
             <ul className="flex gap-2 text-sm font-medium">
@@ -306,8 +321,14 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <Banner />
-      <AboutBenefits />
+      {!isHideBanner && <Banner />}
+      {!isHideBanner && <AboutBenefits />}
+      {isOpenCartSidebar && (
+        <CartSidebar
+          isOpen={isOpenCartSidebar}
+          onClose={() => setIsOpenCartSidebar(false)}
+        />
+      )}
     </>
   );
 };

@@ -5,7 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-sans: 'Inter', Arial, Helvetica, sans-serif; /* Cập nhật font chữ */
+  --font-sans: 'Inter', Arial, Helvetica, sans-serif; 
 }
 
 @theme inline {
@@ -28,7 +28,6 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Heading Sizes in px */
 h1 {
   font-size: 40px;
   line-height: 1.2;
