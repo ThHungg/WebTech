@@ -12,7 +12,7 @@ const ListProductPage = async ({
 
   return (
     <div className="bg-[#F9FAFC]">
-      <div className="container px-[16px] py-[32px] ">
+      <div className="container px-[16px] py-[32px]">
         <div className="flex gap-5">
           <Filter />
           <div className="flex flex-col w-full">
