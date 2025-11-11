@@ -1,10 +1,20 @@
-import CheckoutProgress from "@/components/Common/Checkout/CheckoutProgress";
+import CheckoutForm from "@/components/Checkout/CheckoutForm";
+import CheckoutInfo from "@/components/Checkout/CheckoutInfo";
+import CheckoutProgress from "@/components/Checkout/CheckoutProgress";
 import { memo } from "react";
 
 const CheckoutPage = () => {
   return (
-    <div className="container px-[16px] py-[32px] flex justify-center items-center">
-      <CheckoutProgress />
+    <div className="bg-gray-50 min-h-screen">
+      <div className="px-[16px] py-[32px] flex justify-center items-center border-b-[1px] border-gray-200 bg-white">
+        <CheckoutProgress />
+      </div>
+      <div className="container py-[32px] grid grid-cols-3 gap-3">
+        <div className="col-span-2">
+          <CheckoutForm />
+        </div>
+        <CheckoutInfo />
+      </div>
     </div>
   );
 };

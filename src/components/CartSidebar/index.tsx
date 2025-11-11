@@ -36,12 +36,25 @@ const CartSidebar = ({
             />
           </svg>
         </div>
-        <div className="p-[16px] h-screen">
-          <div className="flex flex-col gap-4 w-full">
-            <CartItemCard />
+        <div className="flex flex-col h-screen p-[16px]">
+          {/* Danh sách có thể cuộn */}
+          <div className="flex-1 overflow-y-auto pb-[60px]">
+            <div className="flex flex-col gap-4">
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+              <CartItemCard />
+            </div>
           </div>
-          <div className="absolute bottom-0 left-0 w-full ">
-            {" "}
+
+          {/* Phần tóm tắt thanh toán */}
+          <div className="sticky bottom-0 left-0 w-full bg-white">
             <CartSummary />
           </div>
         </div>

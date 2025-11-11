@@ -34,7 +34,7 @@ const CheckoutProgress = () => {
           Thông tin giao hàng
         </p>
       </div>
-      <div className="hidden md:block w-24 h-1 bg-gray-200"></div>
+      <div className="hidden md:block w-24 h-1 bg-gray-200 mb-10"></div>
       <div className="flex flex-col items-center gap-2">
         <div className="inline-flex flex-col items-center justify-center bg-gray-300 rounded-full p-[12px]">
           <svg
@@ -42,6 +42,7 @@ const CheckoutProgress = () => {
             width="24"
             height="24"
             viewBox="0 0 20 20"
+            className="text-gray-600"
           >
             <path
               fill="currentColor"
@@ -53,7 +54,7 @@ const CheckoutProgress = () => {
           Phương thức thanh toán
         </p>
       </div>
-      <div className="hidden md:block w-24 h-1 bg-gray-200"></div>
+      <div className="hidden md:block w-24 h-1 bg-gray-200 mb-10"></div>
       <div className="flex flex-col items-center gap-2">
         <div className="inline-flex flex-col items-center justify-center bg-gray-300 rounded-full p-[12px]">
           <svg
@@ -61,6 +62,7 @@ const CheckoutProgress = () => {
             width="24"
             height="24"
             viewBox="0 0 15 15"
+            className="text-gray-600"
           >
             <path
               fill="none"
@@ -69,7 +71,7 @@ const CheckoutProgress = () => {
             />
           </svg>
         </div>
-        <p className="text-[14px] max-w-[100px] text-center font-semibold">
+        <p className="text-[14px] max-w-[100px] text-center font-semibold text-gray-500">
           Thông tin giao hàng
         </p>
       </div>
