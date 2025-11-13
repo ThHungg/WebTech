@@ -11,7 +11,7 @@ const MasterLayout = ({
   children: React.ReactNode;
 }) => {
   const pathname = usePathname();
-  if (pathname === "/auth") {
+  if (pathname.startsWith("/admin") || pathname === "/auth") {
     return <>{children}</>;
   }
   return (

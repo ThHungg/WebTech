@@ -1,4 +1,4 @@
-import CheckoutForm from "@/components/Checkout/CheckoutForm";
+import CheckoutConfirm from "@/components/Checkout/CheckoutConfirm";
 import CheckoutInfo from "@/components/Checkout/CheckoutInfo";
 import CheckoutProgress from "@/components/Checkout/CheckoutProgress";
 import { memo } from "react";
@@ -11,7 +11,7 @@ const CheckoutPage = async ({ params }: { params: { slug?: string[] } }) => {
       </div>
       <div className="container py-[32px] grid grid-cols-3 gap-3">
         <div className="col-span-2">
-          <CheckoutForm />
+        <CheckoutConfirm />
         </div>
         <CheckoutInfo />
       </div>

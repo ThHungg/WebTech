@@ -5,7 +5,25 @@ const DeliveryMethod = () => {
   const [selectedMethod, setSelectedMethod] = useState("standard");
   return (
     <div className="p-[16px] bg-blue-50 border border-blue-200 rounded-lg">
-      <p className="text-[14px] text-blue-900 font-semibold mb-[8px]">
+      <p className="text-[14px] text-blue-900 font-semibold mb-[8px] flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 14 14"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="6" cy="12.49" r="1" />
+            <circle cx="10.5" cy="12.49" r="1" />
+            <path d="M8.38 3.53A4 4 0 1 0 2 7.62m2.5-3.11L6 3.01m.5 6.49v-1H5a2 2 0 0 0-2 2v2" />
+            <path d="M13.5 12.49v-5a1 1 0 0 0-1-1h-5a1 1 0 0 0-1 1v2" />
+          </g>
+        </svg>
         Phương thức giao hàng
       </p>
       {/* Giao hàng tiêu chuẩn */}

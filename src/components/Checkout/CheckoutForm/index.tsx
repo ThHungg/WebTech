@@ -2,15 +2,12 @@
 import { memo, startTransition } from "react";
 import DeliveryMethod from "./DeliveryMethod";
 import { useRouter } from "next/navigation";
+import PaymentMethod from "./PaymentMethod";
+import Link from "next/link";
 
 const CheckoutForm = () => {
   const router = useRouter();
 
-  const handleNavigate = () => {
-    startTransition(() => {
-      router.push("/payment");
-    });
-  };
   return (
     <div className="p-[24px] rounded-lg w-full bg-white rounded-md border-[1px] border-gray-100 shadow-md">
       <h5 className="flex items-center gap-2 font-bold mb-[12px]">
@@ -154,13 +151,14 @@ const CheckoutForm = () => {
           </div>
           {/* Phương thức giao hàng */}
           <DeliveryMethod />
+          <PaymentMethod />
         </div>
-        <button
-          onClick={handleNavigate}
-          className="py-4 bg-red-500 text-[16px] hover:bg-red-600 text-white w-full text-center font-bold rounded-2xl mt-[20px]"
+        <Link
+          href="/checkout/confirmInfo"
+          className="py-4 bg-red-500 text-[16px] hover:bg-red-600 text-white w-full text-center font-bold rounded-2xl mt-[20px] block text-center"
         >
           Tiếp tục
-        </button>
+        </Link>
       </form>
     </div>
   );
