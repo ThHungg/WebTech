@@ -16,8 +16,8 @@ const FeedbackCard = () => {
         </div>
       </div>
       <p className="text-gray-700 mb-4 italic">
-        "Sản phẩm chất lượng, giao hàng nhanh. Nhân viên tư vấn nhiệt tình. Sẽ
-        ủng hộ shop lâu dài!"
+        Sản phẩm chất lượng, giao hàng nhanh. Nhân viên tư vấn nhiệt tình. Sẽ
+        ủng hộ shop lâu dài!
       </p>
       <p className="text-sm text-gray-500 font-medium">
         Sản phẩm: Laptop Gaming ASUS ROG
