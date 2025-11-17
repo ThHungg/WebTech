@@ -4,7 +4,7 @@ import ProductTable from "@/components/Admin/Table/ProductTable";
 import { memo, useState } from "react";
 
 const AdminUsersPage = () => {
-  const [isOpenModal, setIsOpenModal] = useState(true);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   return (
     <div className="p-[32px] ">
       <div className="flex justify-between items-center">

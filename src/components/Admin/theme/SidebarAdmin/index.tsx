@@ -1,9 +1,12 @@
 "use client";
 import Link from "next/link";
-import { memo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { memo } from "react";
 
 const SidebarAdmin = () => {
-  const [selectedMenu, setSelectedMenu] = useState("Dashboard");
+  const pathname = usePathname();
+  const currentMenu = pathname.split("/")[2] || "dashboard";
+
   const listMenuAdmin = [
     {
       name: "Dashboard",
@@ -176,7 +179,7 @@ const SidebarAdmin = () => {
     },
   ];
   return (
-    <div className="max-w-64 w-full border-r border-gray-200 min-h-screen relative">
+    <div className="w-[260px] border-r border-gray-200 min-h-screen relative">
       <div className="p-[24px] border-b border-gray-200 flex gap-2">
         <img
           src="https://h5m4.c19.e2-1.dev/image-video/logo/logocertapple.png"
@@ -194,12 +197,11 @@ const SidebarAdmin = () => {
             href={item.link}
             className={`px-[16px] py-[12px] mb-[4px]  w-full rounded-lg flex items-center gap-2 
           ${
-            selectedMenu === item.name
+            currentMenu === item.link.split("/")[2]
               ? "bg-blue-600 text-white font-medium font-semibold"
               : "text-black"
           }`}
             key={index}
-            onClick={() => setSelectedMenu(item.name)}
           >
             {item.icon}
             {item.name}

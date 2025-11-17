@@ -1,3 +1,5 @@
+import BestSellingProductsSection from "@/components/Admin/Dashboard/BestSellingProductsSection";
+import RecentOrdersSection from "@/components/Admin/Dashboard/RecentOrdersSection";
 import { formatMillionVND } from "@/utils/formatMillionVND";
 
 import { memo } from "react";
@@ -105,6 +107,10 @@ const AdminDashboardPage = () => {
             <h5 className="font-bold mt-[12px] text-white">{item.value}</h5>
           </div>
         ))}
+      </div>
+      <div className="flex gap-2">
+        <RecentOrdersSection />
+        <BestSellingProductsSection />
       </div>
     </div>
   );

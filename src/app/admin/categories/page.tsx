@@ -1,3 +1,4 @@
+import ListCategory from "@/components/Admin/Category/ListCategory";
 import { memo } from "react";
 
 const AdminCategoriesPage = () => {
@@ -9,6 +10,8 @@ const AdminCategoriesPage = () => {
           + Thêm danh mục mới
         </button>
       </div>
+      <ListCategory />
+      
     </div>
   );
 };
