@@ -22,7 +22,7 @@ const RecentOrdersSection = () => {
         </svg>
         Đơn hàng gần đây
       </h5>
-      <div className="">
+      <div className="mt-2">
         <div className="bg-gray-100 hover:bg-gray-200 rounded-lg flex justify-between p-[16px] mb-[12px] hover:translate-x-2 transform transition-all duration-300">
           <div className="">
             <h6 className="font-semibold">#ORD-0123</h6>

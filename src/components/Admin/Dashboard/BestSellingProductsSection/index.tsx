@@ -52,19 +52,15 @@ const BestSellingProductsSection = () => {
         </svg>
         Sản phẩm bán chạy
       </h5>
-      <div className="">
-        <div className="bg-gray-100 hover:bg-gray-200 rounded-lg flex justify-between p-[16px] mb-[12px]">
+      <div className="mt-2">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 hover:bg-gray-200 rounded-lg flex justify-between p-[16px] mb-[12px] hover:translate-x-2 transform transition-all duration-300">
           <div className="">
-            <h6 className="font-semibold">#ORD-0123</h6>
-            <p className="text-[14px] text-gray-500">Đặng Thành Hưng</p>
-            <p className="text-[12px] text-gray-500">17/11/2025 - 10:00 AM</p>
+            <h6 className="font-semibold">Laptop Gaming MSI</h6>
+            <p className="text-[14px] text-gray-500">145 đã bán</p>
           </div>
-          <div className="">
-            <p className="font-semibold text-[16px]">
+          <div className="flex justify-center items-center">
+            <p className="font-semibold text-[16px] text-blue-600">
               {formatMillionVND(2500000)}
-            </p>
-            <p className="px-3 py-1 rounded-full bg-green-100 text-green-600 inline-flex gap-2 items-center font-medium text-[12px]">
-              Hoàn thành
             </p>
           </div>
         </div>

@@ -3,48 +3,41 @@ import { memo } from "react";
 
 const VoucherCard = () => {
   return (
-    <div className="p-[24px] bg-gradient-to-br from-[#2F7EFF] to-[#9716FB] inline-block rounded-xl min-w-[400px] hover:scale-103 hover:shadow-lg  transition-transform">
-      <div className="flex justify-between mb-[16px]">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          className="text-white"
-        >
-          <path
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M19 5L5 19m12.5 1c1.667 0 2.5-.857 2.5-3s-.833-3-2.5-3s-2.5.857-2.5 3s.833 3 2.5 3m-11-10C8.167 10 9 9.143 9 7s-.833-3-2.5-3S4 4.857 4 7s.833 3 2.5 3"
-          />
-        </svg>
-        <span className="px-2 py-2 bg-green-500 rounded-full text-white text-xs font-medium">
-          Hoạt động
-        </span>
-      </div>
-      <div className="mb-[16px]">
-        <p className="text-sm text-gray-200 mb-[8px]">Mã giảm giá</p>
-        <h4 className="font-bold text-white">SALE50</h4>
+    <div className="relative p-[24px] bg-gradient-to-bl from-red-100 to-blue-200 inline-block rounded-xl min-w-[400px] hover:scale-103 hover:shadow-lg transition-transform">
+      <span className="absolute top-4 right-4 px-3 py-1 bg-green-100 inline-block rounded-full text-green-500 text-xs font-medium">
+        Hoạt động
+      </span>
+      <div className="flex justify-between items-center mb-[8px]">
+        <div className="">
+          <p className="text-sm mb-[8px]">Mã giảm giá</p>
+          <h4 className="font-semibold text-blue-500 px-2 py-2 bg-white rounded-lg border border-blue-500">
+            SALE50
+          </h4>
+        </div>
       </div>
       <div>
-        <h5 className="font-bold text-white">50% OFF</h5>
-        <p className="text-sm text-gray-200">
-          Mã giảm giá: <span>{formatVND(1000000)}</span>
+        <h5 className="font-bold">Giảm 15%</h5>
+        <p className="text-sm">
+          <span className="font-semibold">Mã giảm giá</span>:{" "}
+          <span>{formatVND(1000000)}</span>
         </p>
-        <p className="text-sm text-gray-200">
-          Giảm tối đa: <span>{formatVND(50000)}</span>
+        <p className="text-sm">
+          <span className="font-semibold">Giảm giá tối đa</span>:{" "}
+          <span>{formatVND(1000000)}</span>
         </p>
-        <p className="text-sm text-gray-200 mb-[8px]">
-          Hạn sử dụng: <span>23-12-2025</span>
+        <p className="text-sm">
+          <span className="font-semibold">Hạn sử dụng</span>:{" "}
+          <span>23-12-2025</span>
           <span className="text-red-500"> đến</span> <span>25-12-2025</span>
+        </p>
+        <p className="text-sm mb-[8px]">
+          <span className="font-semibold">Đã sử dụng</span>:{" "}
+          <span>12/200</span>
         </p>
       </div>
       <div className="border-t-[1px] border-gray-400 mt-[16px]"></div>
-      <div className="mt-[12px] flex  gap-2">
-        <button className="flex gap-2 items-center justify-center py-2 bg-purple-200  w-full rounded-2xl">
+      <div className="mt-[12px] flex gap-2">
+        <button className="flex gap-2 items-center justify-center py-2 bg-white border-[2px] text-blue-600 border-blue-500 w-full rounded-2xl">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -64,7 +57,7 @@ const VoucherCard = () => {
           </svg>
           Sửa
         </button>
-        <button className="flex gap-2 items-center justify-center py-2 bg-red-500 text-white w-full rounded-2xl">
+        <button className="flex gap-2 items-center justify-center py-2 bg-red-500 w-full rounded-2xl text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
