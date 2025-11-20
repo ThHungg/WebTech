@@ -150,6 +150,22 @@ const ProductModal = ({ onClose }: { onClose: () => void }) => {
                 />
               </div>
             </div>
+            {/* Mô tả sản phẩm */}
+            <div className="flex">
+              <div className="w-full mb-[8px]">
+                <label
+                  htmlFor=""
+                  className="text-[14px] font-semibold mb -[8px]"
+                >
+                  Mô tả
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Nhập mô tả sản phẩm"
+                  className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
+                ></textarea>
+              </div>
+            </div>
           </div>
           {/* Thông tin sản phẩm */}
           <div className="p-[18px] col-span-1">

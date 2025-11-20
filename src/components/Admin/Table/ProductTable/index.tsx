@@ -3,9 +3,16 @@ import { memo, useState } from "react";
 import SearchWithFilter from "../../Common/SearchWithFilter";
 import formatVND from "@/utils/formatVND";
 import Pagination from "../../Common/Pagination";
+import ProductDetailModal from "../../Modal/ProductDetailModal";
+import ToggleSwitch from "../../Common/ToggleSwitch";
 
 const ProductTable = () => {
-  const [statusProduct, setStatusProduct] = useState("");
+  const [isOn, setIsOn] = useState(false);
+
+  const toggleSwitch = () => {
+    setIsOn((prev) => !prev);
+  };
+  const [showProductDetailModal, setShowProductDetailModal] = useState(false);
   return (
     <div className="bg-white rounded-xl shadow-md border-[1px] border-gray-200">
       <SearchWithFilter />
@@ -107,24 +114,7 @@ const ProductTable = () => {
                 </div>
               </th>
               <th className="px-[24px] py-[16px] text-left font-light">
-                <select
-                  value={statusProduct}
-                  onChange={(e) => setStatusProduct(e.target.value)}
-                  className={`p-2 border border-gray-300 rounded-lg ${
-                    statusProduct === "on"
-                      ? "bg-green-100 text-green-600"
-                      : statusProduct === "off"
-                      ? "bg-red-100 text-red-600"
-                      : ""
-                  }`}
-                >
-                  <option value="on" className="bg-white text-black">
-                    Hoạt động
-                  </option>
-                  <option value="off" className="bg-white text-black">
-                    Ngưng bán
-                  </option>
-                </select>
+                <ToggleSwitch isOn={isOn} onToggle={toggleSwitch} />
               </th>
               <th className="px-[24px] py-[16px] text-left font-light">
                 <p className="px-3 py-1 rounded-full whitespace-nowrap bg-green-100 text-green-600 inline-flex gap-2 items-center font-semibold">
@@ -148,7 +138,10 @@ const ProductTable = () => {
               </th>
               <th className="px-[24px] py-[16px] text-left font-light">
                 <div className="flex">
-                  <button className="p-2 hover:bg-green-100 rounded-lg group relative">
+                  <button
+                    onClick={() => setShowProductDetailModal(true)}
+                    className="p-2 hover:bg-green-100 rounded-lg group relative"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -239,7 +232,10 @@ const ProductTable = () => {
                   alt=""
                   className="w-[50px] h-[50px] rounded-lg object-cover"
                 />
-                Laptop Gaming MSI GF63
+                <div className="flex flex-col">
+                  <p className="text-[16px]"> Laptop Gaming MSI GF63 </p>
+                  <p className="text-[14px] font-medium text-gray-500">MSI - GF63</p>
+                </div>
               </th>
               <th className="py-[16px] text-left px-[24px] font-medium text-gray-600">
                 <span className="px-3 py-1 bg-purple-100 text-purple-500 rounded-full">
@@ -251,7 +247,7 @@ const ProductTable = () => {
                   MSI
                 </span>
               </th>
-              <th className="py-[16px] text-left px-[24px] font-medium">
+              <th className="py-[16px] text-left px-[24px] font-semibold text-blue-500">
                 {formatVND(25000000)}
               </th>
               <th className="px-[24px] py-[16px] text-left font-light">
@@ -299,24 +295,7 @@ const ProductTable = () => {
                 </div>
               </th>
               <th className="px-[24px] py-[16px] text-left font-light">
-                <select
-                  value={statusProduct}
-                  onChange={(e) => setStatusProduct(e.target.value)}
-                  className={`p-2 border border-gray-300 rounded-lg ${
-                    statusProduct === "on"
-                      ? "bg-green-100 text-green-600"
-                      : statusProduct === "off"
-                      ? "bg-red-100 text-red-600"
-                      : ""
-                  }`}
-                >
-                  <option value="on" className="bg-white text-black">
-                    Hoạt động
-                  </option>
-                  <option value="off" className="bg-white text-black">
-                    Ngưng bán
-                  </option>
-                </select>
+                <ToggleSwitch isOn={isOn} onToggle={toggleSwitch} />
               </th>
               <th className="px-[24px] py-[16px] text-left font-light">
                 <span className="px-3 py-1 rounded-full bg-green-100 text-green-600 inline-flex gap-2 items-center font-semibold">
@@ -402,151 +381,13 @@ const ProductTable = () => {
                 </div>
               </th>
             </tr>
-            <tr className="border-b border-gray-200">
-              <th className="py-[16px] text-left px-[24px] font-semibold flex items-center gap-2">
-                <img
-                  src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500"
-                  alt=""
-                  className="w-[50px] h-[50px] rounded-lg object-cover"
-                />
-                Laptop Gaming MSI GF63
-              </th>
-              <th className="py-[16px] text-left px-[24px] font-medium text-gray-600">
-                <span className="px-3 py-1 bg-purple-100 text-purple-500 rounded-full">
-                  Laptop
-                </span>
-              </th>
-              <th className="py-[16px] text-left px-[24px] font-medium text-gray-600">
-                <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
-                  MSI
-                </span>
-              </th>
-              <th className="py-[16px] text-left px-[24px] font-medium">
-                {formatVND(25000000)}
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-light">
-                <p>
-                  <span className="font-medium">
-                    Tồn kho<span>:</span>
-                  </span>{" "}
-                  12
-                </p>
-                <p>
-                  <span className="font-medium">
-                    Đã bán <span>:</span>
-                  </span>{" "}
-                  45
-                </p>
-              </th>
-              <th className="px-[24px] py-[16px] text-left font-light">
-                <select
-                  value={statusProduct}
-                  onChange={(e) => setStatusProduct(e.target.value)}
-                  className={`p-2 border border-gray-300 rounded-lg ${
-                    statusProduct === "on"
-                      ? "bg-green-100 text-green-600"
-                      : statusProduct === "off"
-                      ? "bg-red-100 text-red-600"
-                      : ""
-                  }`}
-                >
-                  <option value="on" className="bg-white text-black">
-                    Hoạt động
-                  </option>
-                  <option value="off" className="bg-white text-black">
-                    Ngưng bán
-                  </option>
-                </select>
-              </th>
-              <th className="px-[24px] py-[16px] text-left font-light">
-                <span className="px-3 py-1 rounded-full bg-red-100 text-red-600 inline-flex gap-2 items-center font-semibold">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 14 14"
-                  >
-                    <g
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9.5 10.5h4v-4" />
-                      <path d="M13.5 10.5L7.85 4.85a.5.5 0 0 0-.7 0l-2.3 2.3a.5.5 0 0 1-.7 0L.5 3.5" />
-                    </g>
-                  </svg>
-                  Hết hàng
-                </span>
-              </th>
-              <th className="px-[24px] py-[16px] text-left font-light">
-                <div className="flex">
-                  <button className="p-2 hover:bg-blue-100 rounded-lg group relative">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      className="text-blue-500"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"
-                      />
-                      <path
-                        fill="currentColor"
-                        d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"
-                      />
-                    </svg>
-                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                      Chỉnh sửa
-                    </span>
-                  </button>
-                  <button className="p-2 hover:bg-red-100 rounded-lg group relative">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      className="text-red-500"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zm-7 11q.425 0 .713-.288T11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17m4 0q.425 0 .713-.288T15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17M7 6v13z"
-                      />
-                    </svg>
-                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                      Xóa
-                    </span>
-                  </button>
-                  <button className="p-2 hover:bg-orange-100 rounded-lg group relative">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      className="text-orange-500"
-                    >
-                      <path
-                        fill="none"
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="m12 21l-8-4.5v-9L12 3l8 4.5V12m-8 0l8-4.5M12 12v9m0-9L4 7.5M22 18h-7m3-3l-3 3l3 3"
-                      />
-                    </svg>
-                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                      Nhập hàng
-                    </span>
-                  </button>
-                </div>
-              </th>
-            </tr>
           </tbody>
         </table>
       </div>
       <Pagination />
+      {showProductDetailModal && (
+        <ProductDetailModal onClose={() => setShowProductDetailModal(false)} />
+      )}
     </div>
   );
 };

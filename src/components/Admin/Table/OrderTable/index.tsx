@@ -4,9 +4,11 @@ import SearchWithFilter from "../../Common/SearchWithFilter";
 import formatVND from "@/utils/formatVND";
 import Pagination from "../../Common/Pagination";
 import OverviewOrder from "../../Order/OverviewOrder";
+import OrderDetailModal from "../../Modal/OrderDetailModal";
 
 const OrderTable = () => {
   const [statusProduct, setStatusProduct] = useState("");
+  const [openDetailModa, setOpenDetailModal] = useState(false);
   return (
     <>
       <OverviewOrder />
@@ -98,7 +100,10 @@ const OrderTable = () => {
                   </select>
                 </th>
                 <th className="px-[24px] py-[16px] text-left font-light">
-                  <div className="p-2 hover:bg-blue-100 rounded-lg">
+                  <button
+                    onClick={() => setOpenDetailModal(true)}
+                    className="p-2 hover:bg-blue-100 rounded-lg"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -111,13 +116,16 @@ const OrderTable = () => {
                         d="M12 9a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5a5 5 0 0 1 5-5a5 5 0 0 1 5 5a5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"
                       />
                     </svg>
-                  </div>
+                  </button>
                 </th>
               </tr>
             </tbody>
           </table>
         </div>
         <Pagination />
+        {openDetailModa && (
+          <OrderDetailModal onClose={() => setOpenDetailModal(false)} />
+        )}
       </div>
     </>
   );

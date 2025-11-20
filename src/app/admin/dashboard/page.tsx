@@ -91,7 +91,7 @@ const AdminDashboardPage = () => {
   ];
   return (
     <div className="p-[32px] ">
-      <h3 className="font-semibold mb-[24px]">Dashboard</h3>
+      <h3 className="font-bold mb-[24px]">Dashboard</h3>
       <div className="grid grid-cols-4 mb-[24px] gap-6">
         {listDashboardStats.map((item, index) => (
           <div
