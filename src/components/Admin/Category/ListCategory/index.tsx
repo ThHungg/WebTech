@@ -4,6 +4,7 @@ import ListBrand from "./ListBrand";
 
 const ListCategory = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div className="p-[24px] bg-white rounded-xl shadow-md border-[1px] border-gray-200">
       <div className="border border-gray-200 rounded-lg ">

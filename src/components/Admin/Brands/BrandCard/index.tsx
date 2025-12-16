@@ -1,25 +1,76 @@
 "use client";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import ToggleSwitch from "../../Common/ToggleSwitch";
+import getFullImg from "@/utils/getFullImg";
+import * as brandServices from "../../../../services/branServices";
+import { toast } from "react-toastify";
+import BrandUpdateModal from "../../Modal/BrandUpdateModal";
 
-const BrandCard = () => {
+const BrandCard = ({ brand, refetch }: { brand: any; refetch: () => void }) => {
   const [isOn, setIsOn] = useState(false);
-
-  const toggleSwitch = () => {
+  const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+  useEffect(() => {
+    setIsOn(brand.is_active);
+  }, [brand.is_active]);
+  const toggleSwitch = async () => {
     setIsOn((prev) => !prev);
+    await handleUpdateStatus();
+  };
+
+  const handleDelete = async () => {
+    const newStatus = !isOn;
+    setIsOn(newStatus);
+    try {
+      const res = await brandServices.updateStatusBrand(brand.id, newStatus);
+      if (res.status === "Err") {
+        toast.error(res.message);
+        return;
+      } else {
+        toast.success(res.message);
+      }
+      refetch();
+      console.log("Delete brand response:", res);
+
+      return res;
+    } catch (e) {}
+  };
+
+  const handleUpdateStatus = async () => {
+    const newStatus = !isOn;
+    setIsOn(newStatus);
+    try {
+      const res = await brandServices.updateStatusBrand(brand.id, newStatus);
+      if (res.status === "Err") {
+        toast.error(res.message);
+        setIsOn(isOn);
+        return;
+      } else {
+        toast.success(res.message);
+      }
+      refetch();
+      console.log("Update brand response:", res);
+
+      return res;
+    } catch (e: any) {
+      setIsOn(isOn);
+      toast.error(e.response.data.message);
+    }
   };
 
   return (
     <div className="p-2 bg-white rounded-lg shadow-md inline-block">
       <div className="relative">
         <img
-          src="https://www.freepnglogos.com/uploads/original-samsung-logo-10.png"
+          src={getFullImg(brand.logo)}
           alt=""
           className="w-[200px] h-[200px]"
         />
         <div className="absolute top-2 right-0">
           <div className="flex">
-            <button className="p-1 hover:bg-blue-100 rounded-lg">
+            <button
+              onClick={() => setIsOpenUpdate(true)}
+              className="p-1 hover:bg-blue-100 rounded-lg"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -37,7 +88,10 @@ const BrandCard = () => {
                 />
               </svg>
             </button>
-            <button className="p-1 hover:bg-red-100 rounded-lg">
+            <button
+              onClick={handleDelete}
+              className="p-1 hover:bg-red-100 rounded-lg"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -55,9 +109,15 @@ const BrandCard = () => {
         </div>
       </div>
       <div className="flex justify-between items-center border-t border-gray-300  mt-[12px] pt-[12px] px-[12px]">
-        <h5 className="font-semibold">Sam sung</h5>
+        <h5 className="font-semibold">{brand.name}</h5>
         <ToggleSwitch isOn={isOn} onToggle={toggleSwitch} />
       </div>
+      {isOpenUpdate && (
+        <BrandUpdateModal
+          brand={brand}
+          onClose={() => setIsOpenUpdate(false)}
+        />
+      )}
     </div>
   );
 };

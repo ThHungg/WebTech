@@ -3,6 +3,7 @@ import { memo } from "react";
 import Header from "../Header";
 import Footer from "../Footer";
 import { usePathname } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 
 const MasterLayout = ({
   children,
@@ -20,6 +21,7 @@ const MasterLayout = ({
         <Header />
         {children}
         <Footer />
+   
       </main>
     </div>
   );

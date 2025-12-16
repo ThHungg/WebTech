@@ -1,19 +1,69 @@
 "use client";
 import { memo, useState } from "react";
 import LoginGoogle from "../LoginGoogle";
+import * as authServices from "../../../services/authServices";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const router = useRouter();
+
   const handleShowPass = () => {
     setShowPass(!showPass);
   };
   const handleShowConfirmPass = () => {
     setShowConfirmPass(!showConfirmPass);
   };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      if (formData.password !== formData.confirmPassword) {
+        toast.error("Mật khẩu xác nhận không khớp!");
+      }
+      const res = await authServices.register(
+        formData.name,
+        formData.phone,
+        formData.email,
+        formData.password
+      );
+      if (res.status === "Err") {
+        toast.error(res.message);
+      } else {
+        const login = await authServices.login(
+          formData.email,
+          formData.password
+        );
+        localStorage.setItem("access_token", login.access_token);
+        router.push("/");
+        toast.success(res.message);
+      }
+      return res;
+    } catch (e: any) {
+      toast.error(e.response.data.message || "Đăng ký thất bại!");
+    }
+  };
+
   return (
     <>
-      <form className="mb-[16px]">
+      <form onSubmit={handleRegister} className="mb-[16px]">
         {/* Họ và tên */}
         <div className="mb-[16px]">
           <label
@@ -40,7 +90,9 @@ const RegisterForm = () => {
               />
             </svg>
             <input
-              type="email"
+              type="string"
+              name="name"
+              onChange={handleOnChange}
               placeholder="Vui lòng nhập email của bạn"
               className="w-full py-[13px] pl-[40px] pr-[16px] rounded-lg border-2 border-gray-300 focus:border-2 focus:border-[#E7000B] focus:outline-none"
             />
@@ -69,6 +121,8 @@ const RegisterForm = () => {
             </svg>
             <input
               type="email"
+              name="email"
+              onChange={handleOnChange}
               placeholder="Vui lòng nhập email của bạn"
               className="w-full py-[13px] pl-[40px] pr-[16px] rounded-lg border-2 border-gray-300 focus:border-2 focus:border-[#E7000B] focus:outline-none"
             />
@@ -97,6 +151,8 @@ const RegisterForm = () => {
             </svg>
             <input
               type="tel"
+              name="phone"
+              onChange={handleOnChange}
               placeholder="Vui lòng nhập email của bạn"
               className="w-full py-[13px] pl-[40px] pr-[16px] rounded-lg border-2 border-gray-300 focus:border-2 focus:border-[#E7000B] focus:outline-none"
             />
@@ -138,6 +194,8 @@ const RegisterForm = () => {
             </svg>
             <input
               type={showPass ? "text" : "password"}
+              name="password"
+              onChange={handleOnChange}
               placeholder="Vui lòng nhập mật khẩu của bạn"
               className="w-full py-[13px] pl-[40px] pr-[16px] rounded-lg border-2 border-gray-300 focus:border-2 focus:border-[#E7000B] focus:outline-none"
             />
@@ -213,6 +271,8 @@ const RegisterForm = () => {
             </svg>
             <input
               type={showConfirmPass ? "text" : "password"}
+              name="confirmPassword"
+              onChange={handleOnChange}
               placeholder="Vui lòng nhập mật khẩu của bạn"
               className="w-full py-[13px] pl-[40px] pr-[16px] rounded-lg border-2 border-gray-300 focus:border-2 focus:border-[#E7000B] focus:outline-none"
             />

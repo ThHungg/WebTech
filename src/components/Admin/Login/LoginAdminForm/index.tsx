@@ -1,9 +1,49 @@
 "use client";
 import { memo, useState } from "react";
+import * as authServices from "../../../../services/authServices";
+import { toast } from "react-toastify";
+import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
+
 const LoginAdminForm = () => {
   const [showPass, setShowPass] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const router = useRouter();
+
+  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await authServices.login(formData.email, formData.password);
+      if (res.status === "Err") {
+        toast.error(res.message);
+      } else {
+        const token = res.access_token;
+        const decoded: any = jwtDecode(token);
+        if (decoded.role !== "Admin") {
+          toast.error("Bạn không có quyền truy cập trang này!");
+          return;
+        }
+        localStorage.setItem("access_token", res.access_token);
+        console.log("Navigating to /admin/products");
+
+        toast.success(res.message);
+        router.push("/admin/brands");
+      }
+      return res;
+    } catch (e) {}
+  };
   return (
-    <form action="">
+    <form onSubmit={handleLogin} action="">
       <div className="flex flex-col gap-2 mt-[24px]">
         <label
           htmlFor="username"
@@ -13,6 +53,8 @@ const LoginAdminForm = () => {
         </label>
         <input
           type="text"
+          name="email"
+          onChange={handleOnChange}
           placeholder="Nhập tên đăng nhập"
           className="px-[16px] py-[12px] border-[2px] border-gray-300 rounded-[12px] focus:outline-none focus:border-blue-500"
         />
@@ -24,6 +66,8 @@ const LoginAdminForm = () => {
         <div className="relative w-full">
           <input
             type={showPass ? "text" : "password"}
+            name="password"
+            onChange={handleOnChange}
             placeholder="Nhập mật khẩu"
             className="px-[16px] py-[12px] w-full border-[2px] border-gray-300 rounded-[12px] focus:outline-none focus:border-blue-500"
           />
