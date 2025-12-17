@@ -1,11 +1,72 @@
-import { memo } from "react";
+import { memo, useState } from "react";
+import * as categoryServices from "../../../../../services/categoryServices";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import { toast } from "react-toastify";
 
 const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    parent_id: null as number | null,
+    icon_emoji: "",
+  });
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const handleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]:
+        name === "parent_id" ? (value === "" ? null : parseInt(value)) : value,
+    });
+  };
+
+  const handleEmojiSelect = (emoji: any) => {
+    setFormData({
+      ...formData,
+      icon_emoji: emoji.native,
+    });
+    setShowEmojiPicker(false);
+  };
+
+  const handleCreateCategory = async () => {
+    try {
+      const res = await categoryServices.createCategory(
+        formData.name,
+        formData.parent_id ? String(formData.parent_id) : null,
+        formData.icon_emoji
+      );
+      if (res.status === "Err") {
+        toast.error(res.message);
+        return;
+      }
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      toast.success(res.message);
+      onClose();
+    } catch (error) {
+      console.error("Error creating category:", error);
+    }
+  };
+
+  const fetchCategoryParents = async () => {
+    const res = await categoryServices.getAllParent();
+    return res;
+  };
+
+  const { data: categoryParents = [] } = useQuery({
+    queryKey: ["categoryParents"],
+    queryFn: fetchCategoryParents,
+  });
+
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-      <div className="bg-white rounded-xl max-w-lg  w-full">
-        <div className="flex justify-between p-[24px] ">
-          {" "}
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="flex justify-between p-[24px] sticky top-0 bg-white border-b border-gray-200">
           <h5 className="font-bold">Thêm danh mục mới</h5>
           <button onClick={onClose}>
             <svg
@@ -25,40 +86,81 @@ const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
             </svg>
           </button>
         </div>
-        <div className=" border-b border-gray-200"></div>
-        <div className="">
-          <div className="p-[16px]">
-            <div className="flex flex-col mb-[8px]">
-              <label htmlFor="" className="text-[14px] font-semibold mb-[8px]">
-                Tên danh mục
-              </label>
-              <input
-                type="text"
-                placeholder="Nhập tên danh mục"
-                className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
-              />
+        <div className="p-[16px] overflow-y-auto flex-1">
+          <div className="flex flex-col mb-[16px]">
+            <label className="text-[14px] font-semibold mb-[8px]">
+              Tên danh mục
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleOnChange}
+              placeholder="Nhập tên danh mục"
+              className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
+            />
+          </div>
+
+          <div className="flex flex-col mb-[16px]">
+            <select
+              name="parent_id"
+              value={formData.parent_id || ""}
+              onChange={handleOnChange}
+              className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
+            >
+              <option value="">Chọn danh mục</option>
+              {categoryParents?.data?.map((category: any) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col mb-[16px] relative">
+            <label className="text-[14px] font-semibold mb-[8px]">
+              Icon Emoji
+            </label>
+            <div className="flex items-center gap-2 mb-[8px]">
+              <div className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] flex-1 bg-gray-50">
+                {formData.icon_emoji ? (
+                  <span className="text-[24px]">{formData.icon_emoji}</span>
+                ) : (
+                  <span className="text-gray-400">Chọn emoji</span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                className="px-[16px] py-[8px] bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
+              >
+                Chọn
+              </button>
             </div>
-            <div className="flex flex-col mb-[8px]">
-              <label htmlFor="" className="text-[14px] font-semibold mb-[8px]">
-                Ảnh danh mục
-              </label>
-              <input
-                type="file"
-                placeholder="Nhập tên danh mục"
-                className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
-              />
-            </div>
+            {showEmojiPicker && (
+              <div className="absolute top-[100%] left-0 z-[100] mt-2">
+                <Picker
+                  data={data}
+                  onEmojiSelect={handleEmojiSelect}
+                  theme="light"
+                />
+              </div>
+            )}
           </div>
         </div>
-        <div className="px-[12px] pb-[12px] flex justify-end">
+
+        <div className="px-[16px] pb-[16px] flex justify-end border-t border-gray-200 pt-[16px]">
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="px-[24px] py-[10px] border-[2px] border-gray-200 rounded-lg font-medium hover:scale-105 transition transition-all"
+              className="px-[24px] py-[10px] border-[2px] border-gray-200 rounded-lg font-medium hover:bg-gray-100 transition"
             >
               Huỷ
             </button>
-            <button className="px-[24px] py-[10px] flex items-center gap-2 bg-blue-500 text-white border-[2px] border-gray-200 rounded-lg font-medium hover:scale-105 transition transition-all">
+            <button
+              onClick={handleCreateCategory}
+              className="px-[24px] py-[10px] flex items-center gap-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"
@@ -69,7 +171,7 @@ const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
                   fill="currentColor"
                   d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"
                 />
-              </svg>{" "}
+              </svg>
               Thêm mới
             </button>
           </div>

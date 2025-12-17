@@ -87,7 +87,7 @@ const SidebarAdmin = () => {
       link: "/admin/orders",
     },
     {
-      name: "Danh mục",
+      name: "Danh mục thương hiệu",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -108,10 +108,10 @@ const SidebarAdmin = () => {
           </g>
         </svg>
       ),
-      link: "/admin/categories",
+      link: "/admin/brandcategory",
     },
     {
-      name: "Thương hiệu",
+      name: "Danh mục sản phẩm",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +131,7 @@ const SidebarAdmin = () => {
           </g>
         </svg>
       ),
-      link: "/admin/brands",
+      link: "/admin/categoryproduct",
     },
     {
       name: "Kho hàng",
@@ -179,7 +179,7 @@ const SidebarAdmin = () => {
     },
   ];
   return (
-    <div className="w-[260px] border-r border-gray-200 min-h-screen relative">
+    <div className="flex inline-flex flex-col border-r border-gray-200 min-h-screen relative">
       <div className="p-[24px] border-b border-gray-200 flex gap-2">
         <img
           src="https://h5m4.c19.e2-1.dev/image-video/logo/logocertapple.png"
@@ -195,7 +195,7 @@ const SidebarAdmin = () => {
         {listMenuAdmin.map((item, index) => (
           <Link
             href={item.link}
-            className={`px-[16px] py-[12px] mb-[4px]  w-full rounded-lg flex items-center gap-2 
+            className={`px-[16px] py-[12px] mb-[4px]  w-full rounded-lg flex items-center gap-2 whitespace-nowrap
           ${
             currentMenu === item.link.split("/")[2]
               ? "bg-blue-600 text-white font-medium font-semibold"

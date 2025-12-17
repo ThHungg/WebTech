@@ -27,7 +27,6 @@ export const updateBrand = async (id: number, formDataSend: FormData) => {
     for (const pair of formDataSend.entries()) {
         console.log(`${pair[0]}: ${pair[1]}`);
     }
-    
     const res = await axiosInstance.post(`/brands/update/${id}`, formDataSend);
     return res.data;
 }

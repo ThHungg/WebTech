@@ -1,27 +1,46 @@
-"use client";
 import { memo, useState } from "react";
-import ListBrand from "./ListBrand";
+import ChilrenCategoryCard from "../ChilrenCategoryCard";
+import * as cateBrandLinkServices from "../../../../../services/cateBrandLinkServices";
+import { useQuery } from "@tanstack/react-query";
+const ParentCategoryCard = ({ brandId }: { brandId: number }) => {
+  const [isCollapsed, setIsCollapsed] = useState<Record<number, boolean>>({});
 
-const ListCategory = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const fetchBrandsCategoriesByBrandId = async () => {
+    const res = await cateBrandLinkServices.getLinksByBrandId(brandId);
+    return res;
+  };
 
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories-by-brand", brandId],
+    queryFn: fetchBrandsCategoriesByBrandId,
+  });
+
+  console.log("categories data", categories);
+
+  const toggleCollapse = (id: number) => {
+    setIsCollapsed((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  console.log("categories", brandId);
   return (
-    <div className="p-[24px] bg-white rounded-xl shadow-md border-[1px] border-gray-200">
-      <div className="border border-gray-200 rounded-lg ">
-        <div className="p-[16px] bg-gradient-to-r from-blue-50 to-blue-100">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              {" "}
+    <div className="px-[16px] mt-[12px]">
+      {categories?.data?.parents?.map((parentCate: any, index: number) => (
+        <div className="border border-gray-200 rounded-lg mb-[12px] ">
+          <div className="flex justify-between items-center bg-gray-100 p-[12px] hover:bg-gray-100">
+            <div className="flex gap-2 items-center">
               <button
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                className="p-1 rounded-md hover:bg-blue-200"
+                onClick={() => toggleCollapse(index)}
+                className="p-1 rounded-md hover:bg-gray-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
-                  className="text-blue-700"
+                  className="text-gray-700"
                 >
                   <path
                     fill="none"
@@ -34,31 +53,25 @@ const ListCategory = () => {
                 </svg>
               </button>
               <div className="flex gap-2 items-center">
-                <img
-                  src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500"
-                  alt=""
-                  className="w-[48px] h-[48px] object-cover rounded-lg"
-                />
+                <span className="text-[20px]">{parentCate?.icon_emoji}</span>
                 <div>
-                  <h5 className="font-bold">Laptop</h5>
-                  <p className="text-[12px] text-gray-500">
-                    <span> 3 thương hiệu</span> • <span>9 mẫu sản phẩm</span>
-                  </p>
+                  <h6 className="font-bold !text-[15px]">{parentCate.name}</h6>
+                  <p className="text-[12px] text-gray-500">4 mẫu sản phẩm</p>
                 </div>
               </div>
             </div>
             <div className="flex gap-3 items-center">
-              <button className="px-[12px] py-[8px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg">
-                + Thêm thương hiệu
+              <button className="text-[12px] px-[12px] py-[8px] bg-green-600 hover:bg-blue-700 text-white font-semibold rounded-lg">
+                + Thêm mẫu
               </button>
               <div className="flex gap-2">
-                <button className="p-1 hover:bg-blue-200 rounded-lg">
+                <button className="p-1 hover:bg-gray-200 rounded-lg">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
-                    className="text-blue-600"
+                    className="text-gray-600"
                   >
                     <path
                       fill="currentColor"
@@ -73,8 +86,8 @@ const ListCategory = () => {
                 <button className="p-1 hover:bg-red-100 rounded-lg">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     className="text-red-500"
                   >
@@ -91,11 +104,15 @@ const ListCategory = () => {
               </div>
             </div>
           </div>
+
+          {parentCate?.children && isCollapsed[index] && (
+            <div className="p-[16px]">
+              <ChilrenCategoryCard children={parentCate.children} />
+            </div>
+          )}
         </div>
-        {isCollapsed && <ListBrand />}
-      </div>
+      ))}
     </div>
   );
 };
-
-export default memo(ListCategory);
+export default memo(ParentCategoryCard);

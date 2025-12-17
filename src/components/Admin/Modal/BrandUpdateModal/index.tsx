@@ -2,7 +2,7 @@ import getFullImg from "@/utils/getFullImg";
 import { useQueryClient } from "@tanstack/react-query";
 import { memo, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import * as brandServices from "../../../../services/branServices";
+import * as brandServices from "../../../../services/brandServices";
 
 const BrandUpdateModal = ({
   brand,

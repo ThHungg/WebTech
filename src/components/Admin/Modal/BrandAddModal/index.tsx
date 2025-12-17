@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import * as brandServices from "../../../../services/branServices";
+import * as brandServices from "../../../../services/brandServices";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 
