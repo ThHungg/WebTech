@@ -7,6 +7,13 @@ export const createCategory = async (name: string, parent_id: string | null, ico
     return res.data;
 }
 
+export const updateCategory = async (categoryId: number, name: string, parent_id: string | null, icon_emoji: string) => {
+    const res = await axiosInstance.post(`/categories/update/${categoryId}`, 
+      {name, parent_id, icon_emoji}
+    );
+    return res.data;
+}
+
 export const getAllCategories = async () => {
     const res = await axiosInstance.get(`/categories/getAll`);
     return res.data;

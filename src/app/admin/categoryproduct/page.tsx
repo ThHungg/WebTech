@@ -1,8 +1,6 @@
 "use client";
-import ListCategoryProduct from "@/components/Admin/CategoryProduct/ListCategoryProduct";
-import BrandAddModal from "@/components/Admin/Modal/BrandAddModal";
+import ListCategory from "@/components/Admin/CategoryProduct/ListCategory";
 import CategoryAddModal from "@/components/Admin/Modal/Category/CategoryAddModal";
-import ProductModal from "@/components/Admin/Modal/ProductModal";
 import { memo, useState } from "react";
 
 const AdminBrandsPage = () => {
@@ -15,10 +13,10 @@ const AdminBrandsPage = () => {
           onClick={() => setIsOpenModal(true)}
           className="py-[8px] px-[16px] bg-blue-600 rounded-lg text-white font-semibold"
         >
-          Thêm thương hiệu
+          Thêm danh mục
         </button>
       </div>
-      <ListCategoryProduct />
+      <ListCategory />
       {isOpenModal && (
         <CategoryAddModal onClose={() => setIsOpenModal(false)} />
       )}

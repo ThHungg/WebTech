@@ -17,6 +17,11 @@ export const getAllLinks = async () => {
     return res.data;
 }
 
+export const deleteCateBrandLink = async (categoryId: number, brandId: number) => {
+    const res = await axiosInstance.delete(`/cate_brand_links/deleteLink/${categoryId}/${brandId}`);
+    return res.data;
+}
+
 // export const getLinksByBrandId = async (brandId: number) => {
 //     const res = await axiosInstance.get(`/cate_brand_links/getByBrand/${brandId}`);
 //     return res.data;

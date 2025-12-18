@@ -1,5 +1,5 @@
 "use client";
-import ProductModal from "@/components/Admin/Modal/ProductModal";
+import ProductAddModal from "@/components/Admin/Modal/ProductAddModal";
 import ProductTable from "@/components/Admin/Table/ProductTable";
 import { memo, useState } from "react";
 
@@ -19,7 +19,7 @@ const AdminUsersPage = () => {
       <div>
         <ProductTable />
       </div>
-      {isOpenModal && <ProductModal onClose={() => setIsOpenModal(false)} />}
+      {isOpenModal && <ProductAddModal onClose={() => setIsOpenModal(false)} />}
     </div>
   );
 };

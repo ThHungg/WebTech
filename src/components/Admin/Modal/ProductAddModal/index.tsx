@@ -1,6 +1,6 @@
 import { memo, useState } from "react";
 
-const ProductModal = ({ onClose }: { onClose: () => void }) => {
+const ProductAddModal = ({ onClose }: { onClose: () => void }) => {
   const [productInfo, setProductInfo] = useState([
     {
       value: "",
@@ -36,7 +36,7 @@ const ProductModal = ({ onClose }: { onClose: () => void }) => {
   };
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
-      <div className="bg-white rounded-xl max-w-screen-md  ">
+      <div className="bg-white rounded-xl max-w-screen-2xl">
         <div className="flex justify-between p-[24px] ">
           <h5 className="font-bold">Thêm sản phẩm mới</h5>
           <button onClick={onClose}>
@@ -274,4 +274,4 @@ const ProductModal = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-export default memo(ProductModal);
+export default memo(ProductAddModal);

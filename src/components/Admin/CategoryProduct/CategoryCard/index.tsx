@@ -1,15 +1,17 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import * as categoryServices from "../../../../services/categoryServices";
 import { toast } from "react-toastify";
+import CategoryUpdateModal from "../../Modal/Category/CategoryUpdateModal";
 
-const CategoryProductCard = ({
+const CategoryCard = ({
   category,
   refetch,
 }: {
   category: any;
   refetch: () => void;
 }) => {
-  console.log("category", category);
+  const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
 
   const handleDeleteCategory = async (categoryId: number) => {
     try {
@@ -38,7 +40,13 @@ const CategoryProductCard = ({
           </div>
           <div className="flex gap-1">
             {/* Edit Button */}
-            <button className="p-2 hover:bg-blue-100 rounded-lg transition">
+            <button
+              onClick={() => {
+                setSelectedCategory(category);
+                setIsOpenUpdateModal(true);
+              }}
+              className="p-2 hover:bg-blue-100 rounded-lg transition"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"
@@ -97,7 +105,16 @@ const CategoryProductCard = ({
                 </div>
                 <div className="flex gap-1">
                   {/* Edit Child */}
-                  <button className="p-1 hover:bg-blue-200 rounded transition">
+                  <button
+                    onClick={() => {
+                      setSelectedCategory({
+                        ...children,
+                        parent: category, 
+                      });
+                      setIsOpenUpdateModal(true);
+                    }}
+                    className="p-1 hover:bg-blue-200 rounded transition"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -170,8 +187,18 @@ const CategoryProductCard = ({
           </div>
         )}
       </div>
+      {isOpenUpdateModal && selectedCategory && (
+        <CategoryUpdateModal
+          category={selectedCategory}
+          refetch={refetch}
+          onClose={() => {
+            setIsOpenUpdateModal(false);
+            setSelectedCategory(null);
+          }}
+        />
+      )}
     </div>
   );
 };
 
-export default memo(CategoryProductCard);
+export default memo(CategoryCard);

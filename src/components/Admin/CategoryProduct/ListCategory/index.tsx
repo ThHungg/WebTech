@@ -1,9 +1,9 @@
 import { memo } from "react";
-import CategoryProductCard from "../CategoryProductCard";
 import * as categoryServices from "../../../../services/categoryServices";
 import { useQuery } from "@tanstack/react-query";
+import CategoryCard from "../CategoryCard";
 
-const ListCategoryProduct = () => {
+const ListCategory = () => {
   const fetchAllCategories = async () => {
     const res = await categoryServices.getAllCategories();
     return res;
@@ -17,14 +17,10 @@ const ListCategoryProduct = () => {
   return (
     <div className="flex flex-wrap gap-4 grid grid-cols-4">
       {categories?.data?.map((category: any) => (
-        <CategoryProductCard
-          key={category.id}
-          category={category}
-          refetch={refetch}
-        />
+        <CategoryCard key={category.id} category={category} refetch={refetch} />
       ))}
     </div>
   );
 };
 
-export default memo(ListCategoryProduct);
+export default memo(ListCategory);

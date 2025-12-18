@@ -2,16 +2,23 @@
 import { memo, useState } from "react";
 import * as cateBrandLinkServices from "../../../../services/cateBrandLinkServices";
 import * as brandServices from "../../../../services/brandServices";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ParentCategoryCard from "./ParentCategoryCard";
 import BrandUpdateModal from "../../Modal/BrandUpdateModal";
 import ModalLinkBrandCategory from "../ModalLinkBrandCategory";
 import getFullImg from "@/utils/getFullImg";
+import { toast } from "react-toastify";
 
 const ListBrandCategory = () => {
   const [isCollapsed, setIsCollapsed] = useState<Record<number, boolean>>({});
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
   const [isOpenLinkModal, setIsOpenLinkModal] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+
+  const queryClient = useQueryClient();
 
   const fetchAllBrand = async () => {
     const res = await brandServices.getAllBrands();
@@ -23,15 +30,15 @@ const ListBrandCategory = () => {
     queryFn: fetchAllBrand,
   });
 
-  const fetchAllCateBrandLink = async () => {
-    const res = await cateBrandLinkServices.getAllLinks();
-    return res;
-  };
+  // const fetchAllCateBrandLink = async () => {
+  //   const res = await cateBrandLinkServices.getAllLinks();
+  //   return res;
+  // };
 
-  const { data: allCateBrand } = useQuery({
-    queryKey: ["all-cate-brand-link"],
-    queryFn: fetchAllCateBrandLink,
-  });
+  // const { data: allCateBrand } = useQuery({
+  //   queryKey: ["all-cate-brand-link"],
+  //   queryFn: fetchAllCateBrandLink,
+  // });
 
   const toggleCollapse = (id: number) => {
     setIsCollapsed((prev) => ({
@@ -43,9 +50,14 @@ const ListBrandCategory = () => {
   const handleDeleteBrand = async (id: number) => {
     try {
       const res = await brandServices.deleteBrand(id);
-      console.log("Delete brand response:", res);
-    } catch (error) {
-      console.error("Error deleting brand:", error);
+      if (res.status === "Err") {
+        toast.error(res.message);
+        return;
+      }
+      queryClient.invalidateQueries({ queryKey: ["categories-by-brand"] });
+      toast.success(res.message);
+    } catch (e: any) {
+      toast.error(e.response.data.message);
     }
   };
 
@@ -99,7 +111,10 @@ const ListBrandCategory = () => {
                   </div>
                   <div className="flex gap-3 items-center">
                     <button
-                      onClick={() => setIsOpenLinkModal(true)}
+                      onClick={() => {
+                        setSelectedBrand({ id: brand.id, name: brand.name });
+                        setIsOpenLinkModal(true);
+                      }}
                       className="px-[12px] py-[8px] bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
                     >
                       + Thêm danh mục
@@ -154,11 +169,14 @@ const ListBrandCategory = () => {
                 </div>
               </div>
               {isCollapsed[index] && <ParentCategoryCard brandId={brand.id} />}
-              {isOpenLinkModal && (
+              {isOpenLinkModal && selectedBrand?.id === brand.id && (
                 <ModalLinkBrandCategory
-                  brandId={brand.id}
-                  brandName={brand.name}
-                  onClose={() => setIsOpenLinkModal(false)}
+                  brandId={selectedBrand!.id}
+                  brandName={selectedBrand!.name}
+                  onClose={() => {
+                    setIsOpenLinkModal(false);
+                    setSelectedBrand(null);
+                  }}
                 />
               )}
               {isOpenUpdateModal && (

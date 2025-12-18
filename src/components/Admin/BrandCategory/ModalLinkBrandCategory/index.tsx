@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import * as categoryServices from "../../../../services/categoryServices";
 import * as cateBrandLinkServices from "../../../../services/cateBrandLinkServices";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 const ModalLinkBrandCategory = ({
@@ -16,6 +16,8 @@ const ModalLinkBrandCategory = ({
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
     null
   );
+
+  const queryClient = useQueryClient();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
@@ -37,13 +39,13 @@ const ModalLinkBrandCategory = ({
         categoryId,
         brandId
       );
-      console.log("res", res);
       if (res.status === "Err") {
         toast.error(res.message);
         return;
       }
+      queryClient.invalidateQueries({ queryKey: ["categories-by-brand"] });
+      onClose();
       toast.success(res.message);
-      console.log("Link category to brand response:", res);
     } catch (e: any) {
       toast.error(
         e.response.data.message || "Đã có lỗi xảy ra khi liên kết danh mục"

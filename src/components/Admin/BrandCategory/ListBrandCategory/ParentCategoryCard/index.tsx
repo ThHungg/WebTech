@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
-import ChilrenCategoryCard from "../ChilrenCategoryCard";
 import * as cateBrandLinkServices from "../../../../../services/cateBrandLinkServices";
 import { useQuery } from "@tanstack/react-query";
+import ChildrenCategoryCard from "../ChildrenCategoryCard";
 const ParentCategoryCard = ({ brandId }: { brandId: number }) => {
   const [isCollapsed, setIsCollapsed] = useState<Record<number, boolean>>({});
 
@@ -10,12 +10,10 @@ const ParentCategoryCard = ({ brandId }: { brandId: number }) => {
     return res;
   };
 
-  const { data: categories = [] } = useQuery({
+  const { data: categories = [], refetch } = useQuery({
     queryKey: ["categories-by-brand", brandId],
     queryFn: fetchBrandsCategoriesByBrandId,
   });
-
-  console.log("categories data", categories);
 
   const toggleCollapse = (id: number) => {
     setIsCollapsed((prev) => ({
@@ -24,11 +22,10 @@ const ParentCategoryCard = ({ brandId }: { brandId: number }) => {
     }));
   };
 
-  console.log("categories", brandId);
   return (
     <div className="px-[16px] mt-[12px]">
       {categories?.data?.parents?.map((parentCate: any, index: number) => (
-        <div className="border border-gray-200 rounded-lg mb-[12px] ">
+        <div className="border border-gray-200 rounded-lg mb-[12px]">
           <div className="flex justify-between items-center bg-gray-100 p-[12px] hover:bg-gray-100">
             <div className="flex gap-2 items-center">
               <button
@@ -61,10 +58,10 @@ const ParentCategoryCard = ({ brandId }: { brandId: number }) => {
               </div>
             </div>
             <div className="flex gap-3 items-center">
-              <button className="text-[12px] px-[12px] py-[8px] bg-green-600 hover:bg-blue-700 text-white font-semibold rounded-lg">
+              {/* <button className="text-[12px] px-[12px] py-[8px] bg-green-600 hover:bg-blue-700 text-white font-semibold rounded-lg">
                 + Thêm mẫu
-              </button>
-              <div className="flex gap-2">
+              </button> */}
+              {/* <div className="flex gap-2">
                 <button className="p-1 hover:bg-gray-200 rounded-lg">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -101,13 +98,17 @@ const ParentCategoryCard = ({ brandId }: { brandId: number }) => {
                     />
                   </svg>
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
 
           {parentCate?.children && isCollapsed[index] && (
             <div className="p-[16px]">
-              <ChilrenCategoryCard children={parentCate.children} />
+              <ChildrenCategoryCard
+                children={parentCate.children}
+                brandId={brandId}
+                refetch={refetch}
+              />
             </div>
           )}
         </div>

@@ -38,3 +38,26 @@ export const getDetail = async () => {
   const res = await axiosInstance.get("/users/getUser");
   return res.data;
 };
+
+export const getAllUsers = async (
+  page: number = 1,
+  limit: number = 10,
+  search: string = "",
+  role?: string
+) => {
+  const params: any = { page, limit, search };
+  if (role) params.role = role;
+  const res = await axiosInstance.get("/users/getAll", { params });
+  return res.data;
+};
+
+export const updateStatusUser = async (id: number, is_active: boolean) => {
+    const res = await axiosInstance.post(`/users/update/${id}`, {is_active});
+    return res.data;
+}
+
+export const deleteUser = async (id: number) => {
+    const res = await axiosInstance.delete(`/users/delete/${id}`);
+    return res.data;
+}
+

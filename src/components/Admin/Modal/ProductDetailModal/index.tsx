@@ -4,7 +4,6 @@ import { memo, useState } from "react";
 import ToggleSwitch from "../../Common/ToggleSwitch";
 
 const ProductDetailModal = ({ onClose }: { onClose: () => void }) => {
-  const [statusProduct, setStatusProduct] = useState("");
   const [isOn, setIsOn] = useState(false);
 
   const toggleSwitch = () => {

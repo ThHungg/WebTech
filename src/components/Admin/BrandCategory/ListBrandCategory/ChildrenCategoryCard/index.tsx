@@ -1,7 +1,32 @@
 import { memo } from "react";
+import * as cateBrandLinkServices from "../../../../../services/cateBrandLinkServices";
+import { toast } from "react-toastify";
 
-const ChilrenCategoryCard = ({ children }: { children: any }) => {
-  console.log("children in ProductCard", children);
+const ChildrenCategoryCard = ({
+  children,
+  brandId,
+  refetch,
+}: {
+  children: any;
+  brandId: number;
+  refetch: () => void;
+}) => {
+  const handleDeleteLink = async (categoryId: number) => {
+    try {
+      const res = await cateBrandLinkServices.deleteCateBrandLink(
+        categoryId,
+        brandId
+      );
+      if (res.status === "Err") {
+        toast.error(res.message);
+        return;
+      }
+      toast.success(res.message);
+      refetch();
+    } catch (e: any) {
+      toast.error(e.response.data.message);
+    }
+  };
   return (
     <div className="p-[12px]">
       {children.map((product: any, index: number) => (
@@ -37,7 +62,10 @@ const ChilrenCategoryCard = ({ children }: { children: any }) => {
                   />
                 </svg>
               </button>
-              <button className="p-1 hover:bg-red-100 rounded-lg">
+              <button
+                onClick={() => handleDeleteLink(product.id)}
+                className="p-1 hover:bg-red-100 rounded-lg"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -63,4 +91,4 @@ const ChilrenCategoryCard = ({ children }: { children: any }) => {
   );
 };
 
-export default memo(ChilrenCategoryCard);
+export default memo(ChildrenCategoryCard);
