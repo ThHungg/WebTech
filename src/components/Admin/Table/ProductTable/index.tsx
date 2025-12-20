@@ -9,13 +9,14 @@ import ToggleSwitch from "../../Common/ToggleSwitch";
 const ProductTable = () => {
   const [isOn, setIsOn] = useState(false);
 
+
   const toggleSwitch = () => {
     setIsOn((prev) => !prev);
   };
   const [showProductDetailModal, setShowProductDetailModal] = useState(false);
   return (
     <div className="bg-white rounded-xl shadow-md border-[1px] border-gray-200">
-      <SearchWithFilter />
+      {/* <SearchWithFilter /> */}
       <div className="">
         <table className="w-full">
           <thead className="bg-gray-100">
@@ -234,7 +235,9 @@ const ProductTable = () => {
                 />
                 <div className="flex flex-col">
                   <p className="text-[16px]"> Laptop Gaming MSI GF63 </p>
-                  <p className="text-[14px] font-medium text-gray-500">MSI - GF63</p>
+                  <p className="text-[14px] font-medium text-gray-500">
+                    MSI - GF63
+                  </p>
                 </div>
               </th>
               <th className="py-[16px] text-left px-[24px] font-medium text-gray-600">
@@ -384,7 +387,7 @@ const ProductTable = () => {
           </tbody>
         </table>
       </div>
-      <Pagination />
+      {/* <Pagination /> */}
       {showProductDetailModal && (
         <ProductDetailModal onClose={() => setShowProductDetailModal(false)} />
       )}

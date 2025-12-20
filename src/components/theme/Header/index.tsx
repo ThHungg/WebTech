@@ -2,12 +2,17 @@
 import AboutBenefits from "@/components/Header/AboutBenefits";
 import Banner from "@/components/Header/Banner";
 import Link from "next/link";
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import CartSidebar from "@/components/CartSidebar";
+import getToken from "@/utils/getToken";
 
 const Header = () => {
   const [isOpenCartSidebar, setIsOpenCartSidebar] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    setToken(getToken());
+  }, []);
   const pathname = usePathname();
   const hiddenBanner = ["/products/", "/cart", "/checkout", "/profile"];
   const isHideBanner = hiddenBanner.some((url) => pathname.startsWith(url));
@@ -231,23 +236,45 @@ const Header = () => {
               </div>
               {/* Card & Login */}
               <div className="flex items-center gap-6">
-                <Link
-                  href="/auth"
-                  className="flex items-center gap-2 bg-[#E7000B] px-[16px] py-[8px] rounded-[8px] text-white font-medium"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 24 24"
+                {!token ? (
+                  <Link
+                    href="/auth"
+                    className="flex items-center gap-2 bg-[#E7000B] px-[16px] py-[8px] rounded-[8px] text-white font-medium"
                   >
-                    <path
-                      fill="currentColor"
-                      d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z"
-                    />
-                  </svg>
-                  Đăng nhập
-                </Link>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z"
+                      />
+                    </svg>
+                    Đăng nhập
+                  </Link>
+                ) : (
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 rounded-[8px] text-white font-medium"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="34"
+                      height="34"
+                      viewBox="0 0 24 24"
+                      className="hover:text-red-500 text-black"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeWidth={1}
+                        fill="currentColor"
+                        d="M6.196 17.485q1.275-.918 2.706-1.451Q10.332 15.5 12 15.5t3.098.534t2.706 1.45q.99-1.025 1.593-2.42Q20 13.667 20 12q0-3.325-2.337-5.663T12 4T6.337 6.338T4 12q0 1.667.603 3.064q.603 1.396 1.593 2.42m5.805-4.984q-1.264 0-2.133-.868T9 9.501t.868-2.133T12 6.5t2.132.868T15 9.5t-.868 2.132t-2.131.868M12 21q-1.883 0-3.525-.701t-2.858-1.916t-1.916-2.858T3 12t.701-3.525t1.916-2.858q1.216-1.215 2.858-1.916T12 3t3.525.701t2.858 1.916t1.916 2.858T21 12t-.701 3.525t-1.916 2.858q-1.216 1.215-2.858 1.916T12 21m0-1q1.383 0 2.721-.484q1.338-.483 2.313-1.324q-.974-.783-2.255-1.237T12 16.5t-2.789.445t-2.246 1.247q.975.84 2.314 1.324T12 20m0-8.5q.842 0 1.421-.579T14 9.5t-.579-1.421T12 7.5t-1.421.579T10 9.5t.579 1.421T12 11.5m0 6.75"
+                      />
+                    </svg>
+                  </Link>
+                )}
                 <button
                   onClick={() => setIsOpenCartSidebar(true)}
                   className="p-2"

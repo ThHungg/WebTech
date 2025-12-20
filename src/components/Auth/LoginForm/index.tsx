@@ -1,15 +1,50 @@
 "use client";
-import { memo, useState } from "react";
+import { memo, use, useState } from "react";
 import LoginGoogle from "../LoginGoogle";
+import * as authServices from "../../../services/authServices";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
+
+  const router = useRouter();
+
   const handleShowPass = () => {
     setShowPass(!showPass);
   };
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await authServices.login(formData.email, formData.password);
+      if (res.status === "Err") {
+        toast.error(res.message);
+      } else {
+        router.push("/");
+        localStorage.setItem("access_token", res.access_token);
+        toast.success(res.message);
+      }
+      return res;
+    } catch (e: any) {
+      toast.error(e.response.data.message || "Đăng nhập thất bại!");
+    }
+  };
   return (
     <>
-      <form className="mb-[16px]">
+      <form onSubmit={handleLogin} className="mb-[16px]">
         {/* Email */}
         <div className="mb-[16px]">
           <label
@@ -33,6 +68,8 @@ const LoginForm = () => {
             </svg>
             <input
               type="email"
+              name="email"
+              onChange={handleOnChange}
               placeholder="Vui lòng nhập email của bạn"
               className="w-full py-[13px] pl-[40px] pr-[16px] rounded-lg border-2 border-gray-300 focus:border-2 focus:border-[#E7000B] focus:outline-none"
             />
@@ -75,6 +112,8 @@ const LoginForm = () => {
             <input
               type={showPass ? "text" : "password"}
               placeholder="Vui lòng nhập mật khẩu của bạn"
+              name="password"
+              onChange={handleOnChange}
               className="w-full py-[13px] pl-[40px] pr-[16px] rounded-lg border-2 border-gray-300 focus:border-2 focus:border-[#E7000B] focus:outline-none"
             />
             <svg

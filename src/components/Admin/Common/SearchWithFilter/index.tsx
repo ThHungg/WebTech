@@ -1,12 +1,46 @@
-import { memo } from "react";
+"use client";
+import { memo, useEffect, useState } from "react";
 
-const SearchWithFilter = () => {
+interface SearchWithFilterProps {
+  onSearch: (searchValue: string) => void;
+  onFilterRole: (role: string) => void;
+}
+
+const SearchWithFilter = ({
+  onSearch,
+  onFilterRole,
+}: SearchWithFilterProps) => {
+  const [searchValue, setSearchValue] = useState("");
+
+  const roles = [
+    { id: 1, role_name: "Admin" },
+    { id: 2, role_name: "User" },
+  ];
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      onSearch(searchValue);
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchValue, onSearch]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
+  const handleFilterRole = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    onFilterRole(e.target.value);
+  };
+
   return (
     <div className="p-[24px] border-b border-gray-200">
       <div className="flex w-full gap-2">
         <div className="relative w-full">
           <input
             type="text"
+            placeholder="Tìm kiếm người dùng"
+            onChange={handleSearch}
             className="border-[1px] border-gray-200 py-[8px] pl-[40px] pr-[16px] w-full rounded-lg text-[16px]  focus:outline-none focus:border-blue-500 focus:border-[2px]"
           />
           <svg
@@ -22,33 +56,19 @@ const SearchWithFilter = () => {
             />
           </svg>
         </div>
-        <button className="whitespace-nowrap px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold">
-          Tìm kiếm
-        </button>
       </div>
       <div className="flex gap-2">
         <div className="mt-[18px]">
           <select
-            name=""
-            id=""
+            onChange={handleFilterRole}
             className="border-gray-300 border-[1px] px-4 py-2 rounded-lg"
           >
-            <option value="">Chọn thương hiệu</option>
-            <option value="">LG</option>
-            <option value="">Lenovo</option>
-            <option value="">Samsung</option>
-            <option value="">Asus</option>
-          </select>
-        </div>
-        <div className="mt-[18px]">
-          <select
-            name=""
-            id=""
-            className="border-gray-300 border-[1px] px-4 py-2 rounded-lg"
-          >
-            <option value="">Chọn trạng thái</option>
-            <option value="">Hết hàng</option>
-            <option value="">Đang bán</option>
+            <option value="">Chọn vai trò</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.role_name}>
+                {role.role_name}
+              </option>
+            ))}
           </select>
         </div>
       </div>

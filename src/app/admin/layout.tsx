@@ -11,13 +11,5 @@ export default function AdminRootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body>
-        <div className="">
-          <MasterLayoutAdmin>{children}</MasterLayoutAdmin>
-        </div>
-      </body>
-    </html>
-  );
+  return <MasterLayoutAdmin>{children}</MasterLayoutAdmin>;
 }

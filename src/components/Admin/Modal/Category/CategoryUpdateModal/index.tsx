@@ -1,56 +1,42 @@
-import { memo, useState } from "react";
-import * as categoryServices from "../../../../../services/categoryServices";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+import { memo, useState } from "react";
+import * as categoryServices from "../../../../../services/categoryServices";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    parent_id: null as number | null,
-    icon_emoji: "",
-  });
+const CategoryUpdateModal = ({
+  onClose,
+  category,
+  refetch,
+}: {
+  onClose: () => void;
+  category: any;
+  refetch: () => void;
+}) => {
+  const [formData, setFormData] = useState(() => ({
+    name: category?.name || "",
+    parent_id: category?.parent_id || null,
+    icon_emoji: category?.icon_emoji || "",
+  }));
+
+  console.log("category", formData);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  const queryClient = useQueryClient();
-
-  const handleOnChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleOnChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]:
-        name === "parent_id" ? (value === "" ? null : parseInt(value)) : value,
+      [name]: name === "parent_id" ? (value ? parseInt(value) : null) : value,
     });
   };
-
+  console.log(category.parent.name);
   const handleEmojiSelect = (emoji: any) => {
     setFormData({
       ...formData,
       icon_emoji: emoji.native,
     });
     setShowEmojiPicker(false);
-  };
-
-  const handleCreateCategory = async () => {
-    try {
-      const res = await categoryServices.createCategory(
-        formData.name,
-        formData.parent_id ? String(formData.parent_id) : null,
-        formData.icon_emoji
-      );
-      if (res.status === "Err") {
-        toast.error(res.message);
-        return;
-      }
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-      toast.success(res.message);
-      onClose();
-    } catch (error) {
-      console.error("Error creating category:", error);
-    }
   };
 
   const fetchCategoryParents = async () => {
@@ -63,11 +49,32 @@ const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
     queryFn: fetchCategoryParents,
   });
 
+  const handleUpdateCategory = async () => {
+    try {
+      const res = await categoryServices.updateCategory(
+        category.id,
+        formData.name,
+        formData.parent_id ? String(formData.parent_id) : null,
+        formData.icon_emoji
+      );
+      if (res.status === "Err") {
+        toast.error(res.message);
+        return;
+      }
+      toast.success(res.message);
+      refetch();
+      onClose();
+    } catch (e: any) {
+      toast.error(
+        e.response.data.message || "Đã có lỗi xảy ra khi cập nhật danh mục"
+      );
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col">
         <div className="flex justify-between p-[24px] sticky top-0 bg-white border-b border-gray-200">
-          <h5 className="font-bold">Thêm danh mục mới</h5>
+          <h5 className="font-bold">Chỉnh sửa danh mục</h5>
           <button onClick={onClose}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -102,6 +109,9 @@ const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
           </div>
 
           <div className="flex flex-col mb-[16px]">
+            <label className="text-[14px] font-semibold mb-[8px]">
+              Danh mục cha
+            </label>
             <select
               name="parent_id"
               value={formData.parent_id || ""}
@@ -158,7 +168,7 @@ const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
               Huỷ
             </button>
             <button
-              onClick={handleCreateCategory}
+              onClick={() => handleUpdateCategory()}
               className="px-[24px] py-[10px] flex items-center gap-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition"
             >
               <svg
@@ -172,7 +182,7 @@ const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
                   d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"
                 />
               </svg>
-              Thêm mới
+              Cập nhật
             </button>
           </div>
         </div>
@@ -181,4 +191,4 @@ const CategoryAddModal = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-export default memo(CategoryAddModal);
+export default memo(CategoryUpdateModal);
