@@ -34,10 +34,9 @@ const LoginAdminForm = () => {
           return;
         }
         localStorage.setItem("access_token", res.access_token);
-        console.log("Navigating to /admin/products");
 
         toast.success(res.message);
-        router.push("/admin/brands");
+        router.push("/admin/products");
       }
       return res;
     } catch (e) {}

@@ -11,6 +11,7 @@ const ChildrenCategoryCard = ({
   brandId: number;
   refetch: () => void;
 }) => {
+  console.log("children in children card", children);
   const handleDeleteLink = async (categoryId: number) => {
     try {
       const res = await cateBrandLinkServices.deleteCateBrandLink(
@@ -30,7 +31,10 @@ const ChildrenCategoryCard = ({
   return (
     <div className="p-[12px]">
       {children.map((product: any, index: number) => (
-        <div className="flex mb-[12px] justify-between items-center bg-gray-50 p-[12px] hover:bg-gray-100 rounded-lg">
+        <div
+          key={index}
+          className="flex mb-[12px] justify-between items-center bg-gray-50 p-[12px] hover:bg-gray-100 rounded-lg"
+        >
           <div className="flex gap-2 items-center">
             {/* <img
               src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500"

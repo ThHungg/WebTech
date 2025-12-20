@@ -13,6 +13,7 @@ const ListBrandCategory = () => {
   const [isCollapsed, setIsCollapsed] = useState<Record<number, boolean>>({});
   const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
   const [isOpenLinkModal, setIsOpenLinkModal] = useState(false);
+  const [selectedUpdateBrand, setSelectedUpdateBrand] = useState<any>(null);
   const [selectedBrand, setSelectedBrand] = useState<{
     id: number;
     name: string;
@@ -94,11 +95,11 @@ const ListBrandCategory = () => {
                         />
                       </svg>
                     </button>
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-3 items-center">
                       <img
                         src={getFullImg(brand.logo)}
                         alt=""
-                        className="w-[48px] h-[48px] object-cover rounded-lg"
+                        className="aspect-square max-w-[48px] object-contain rounded-lg"
                       />
                       <div>
                         <h5 className="font-bold">{brand.name}</h5>
@@ -122,7 +123,10 @@ const ListBrandCategory = () => {
                     <div className="flex gap-2">
                       {/* Update */}
                       <button
-                        onClick={() => setIsOpenUpdateModal(true)}
+                        onClick={() => {
+                          setIsOpenUpdateModal(true);
+                          setSelectedUpdateBrand(brand);
+                        }}
                         className="p-1 hover:bg-blue-200 rounded-lg"
                       >
                         <svg
@@ -181,7 +185,7 @@ const ListBrandCategory = () => {
               )}
               {isOpenUpdateModal && (
                 <BrandUpdateModal
-                  brand={brand}
+                  brand={selectedUpdateBrand}
                   onClose={() => setIsOpenUpdateModal(false)}
                 />
               )}

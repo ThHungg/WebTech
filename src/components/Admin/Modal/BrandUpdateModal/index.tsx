@@ -11,6 +11,8 @@ const BrandUpdateModal = ({
   brand: any;
   onClose: () => void;
 }) => {
+  console.log("brand in modal", brand);
+
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({

@@ -25,7 +25,10 @@ const ParentCategoryCard = ({ brandId }: { brandId: number }) => {
   return (
     <div className="px-[16px] mt-[12px]">
       {categories?.data?.parents?.map((parentCate: any, index: number) => (
-        <div className="border border-gray-200 rounded-lg mb-[12px]">
+        <div
+          key={index}
+          className="border border-gray-200 rounded-lg mb-[12px]"
+        >
           <div className="flex justify-between items-center bg-gray-100 p-[12px] hover:bg-gray-100">
             <div className="flex gap-2 items-center">
               <button
