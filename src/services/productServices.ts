@@ -11,6 +11,11 @@ export const updateProduct = async (id: number, productData: FormData) => {
     return res.data;
 }
 
+export const updateProductStatus = async (id: number, status: boolean) => {
+    const res = await axiosInstance.put(`/products/updateStatus/${id}`, {status});
+    return res.data;
+}
+
 export const getAllProducts = async () => {
     const res = await axiosInstance.get("/products/getAll");
     return res.data;

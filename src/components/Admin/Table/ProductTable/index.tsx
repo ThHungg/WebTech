@@ -11,15 +11,15 @@ import getFullImg from "@/utils/getFullImg";
 import { toast } from "react-toastify";
 
 const ProductTable = () => {
-  const [isOn, setIsOn] = useState(false);
   const [showProductDetailModal, setShowProductDetailModal] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null
   );
+  const [productStates, setProductStates] = useState<{
+    [key: number]: boolean;
+  }>({});
+
   console.log("Selected Product ID:", selectedProductId);
-  const toggleSwitch = () => {
-    setIsOn((prev) => !prev);
-  };
 
   const fetchAllProducts = async () => {
     const res = await productServices.getAllProducts();
@@ -31,6 +31,31 @@ const ProductTable = () => {
     queryFn: fetchAllProducts,
     refetchOnWindowFocus: false,
   });
+
+  const handleUpdateStatus = async (
+    productId: number,
+    currentStatus: boolean
+  ) => {
+    const newStatus = !currentStatus;
+    setProductStates((prev) => ({ ...prev, [productId]: newStatus }));
+
+    try {
+      const res = await productServices.updateProductStatus(
+        productId,
+        newStatus
+      );
+      if (res.status === "Err") {
+        toast.error(res.message);
+        setProductStates((prev) => ({ ...prev, [productId]: currentStatus }));
+        return;
+      }
+      toast.success(res.message);
+      refetch();
+    } catch (e: any) {
+      setProductStates((prev) => ({ ...prev, [productId]: currentStatus }));
+      toast.error(e.response?.data?.message);
+    }
+  };
 
   const handleDelete = async (id: number) => {
     try {
@@ -105,12 +130,12 @@ const ProductTable = () => {
                   </th>
                   <th className="py-[16px] text-left px-[24px] font-medium">
                     <div className="flex flex-col">
-                      <span className="text-blue-600 font-semibold">
+                      <span className="text-blue-600 whitespace-nowrap font-semibold">
                         {formatVND(
                           parseInt(product.variants?.[0]?.price || "0")
                         )}
                       </span>
-                      <span className="text-gray-500 line-through text-sm">
+                      <span className="text-gray-500 whitespace-nowrap line-through text-sm">
                         {formatVND(
                           parseInt(product.variants?.[0]?.original_price || "0")
                         )}
@@ -166,7 +191,15 @@ const ProductTable = () => {
                     </div>
                   </th>
                   <th className="px-[24px] py-[16px] text-left font-light">
-                    <ToggleSwitch isOn={isOn} onToggle={toggleSwitch} />
+                    <ToggleSwitch
+                      isOn={productStates[product.id] ?? product.is_active}
+                      onToggle={() =>
+                        handleUpdateStatus(
+                          product.id,
+                          productStates[product.id] ?? product.is_active
+                        )
+                      }
+                    />
                   </th>
                   <th className="px-[24px] py-[16px] text-left font-light">
                     <p className="px-3 py-1 rounded-full whitespace-nowrap bg-green-100 text-green-600 inline-flex gap-2 items-center font-semibold">

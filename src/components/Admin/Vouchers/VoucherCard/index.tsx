@@ -1,38 +1,79 @@
+import { formatDate } from "@/utils/formatDate";
+import { formatPercentage } from "@/utils/formatPercentage";
+import { formatValueDiscount } from "@/utils/formatValueDiscount";
 import formatVND from "@/utils/formatVND";
 import { memo } from "react";
+import * as voucherServices from "../../../../services/voucherServices";
 
-const VoucherCard = () => {
+const VoucherCard = ({
+  voucher,
+  refetch,
+}: {
+  voucher: any;
+  refetch: () => void;
+}) => {
+  console.log("voucher in card", voucher);
+  const handleDeleteVoucher = async () => {
+    try {
+      await voucherServices.deleteVoucher(voucher.id);
+      refetch();
+    } catch (error) {
+      console.error("Error deleting voucher:", error);
+    }
+  };
   return (
     <div className="relative p-[24px] bg-gradient-to-bl from-red-100 to-blue-200 inline-block rounded-xl min-w-[400px] hover:scale-103 hover:shadow-lg transition-transform">
-      <span className="absolute top-4 right-4 px-3 py-1 bg-green-100 inline-block rounded-full text-green-500 text-xs font-medium">
-        Hoạt động
-      </span>
+      {voucher.is_active ? (
+        <span className="absolute top-4 right-4 px-3 py-1 bg-green-100 inline-block rounded-full text-green-500 text-xs font-medium">
+          Hoạt động
+        </span>
+      ) : (
+        <div className="absolute top-2 right-2 bg-gray-500 text-white text-xs px-2 py-1 rounded-lg">
+          Đã vô hiệu hóa
+        </div>
+      )}
       <div className="flex justify-between items-center mb-[8px]">
         <div className="">
           <p className="text-sm mb-[8px]">Mã giảm giá</p>
-          <h4 className="font-semibold text-blue-500 px-2 py-2 bg-white rounded-lg border border-blue-500">
-            SALE50
+          <h4 className="font-semibold text-center text-blue-500 px-2 py-2 bg-white rounded-lg border border-blue-500">
+            {voucher.Voucher_Details[0]?.code}
           </h4>
         </div>
       </div>
       <div>
-        <h5 className="font-bold">Giảm 15%</h5>
+        {voucher.discount_type === "percentage" ? (
+          <h5 className="font-bold">
+            Giảm {formatPercentage(voucher.discount_value)}
+          </h5>
+        ) : (
+          <div>
+            {" "}
+            <h5 className="font-bold">
+              Giảm {formatValueDiscount(voucher.discount_value)}
+            </h5>
+          </div>
+        )}
         <p className="text-sm">
-          <span className="font-semibold">Mã giảm giá</span>:{" "}
-          <span>{formatVND(1000000)}</span>
+          <span className="font-semibold">Giá trị tối thiểu</span>:{" "}
+          <span>{formatVND(voucher.Voucher_Constraint.min_order_amount)}</span>
         </p>
         <p className="text-sm">
           <span className="font-semibold">Giảm giá tối đa</span>:{" "}
-          <span>{formatVND(1000000)}</span>
+          <span>
+            {formatVND(voucher.Voucher_Constraint.max_discount_amount)}
+          </span>
         </p>
         <p className="text-sm">
           <span className="font-semibold">Hạn sử dụng</span>:{" "}
-          <span>23-12-2025</span>
-          <span className="text-red-500"> đến</span> <span>25-12-2025</span>
+          <span>{formatDate(voucher.start_date)}</span>
+          <span className="text-red-500"> đến</span>{" "}
+          <span>{formatDate(voucher.end_date)}</span>
         </p>
         <p className="text-sm mb-[8px]">
           <span className="font-semibold">Đã sử dụng</span>:{" "}
-          <span>12/200</span>
+          <span>
+            {voucher.used_count}/{voucher.usage_limit}
+          </span>
         </p>
       </div>
       <div className="border-t-[1px] border-gray-400 mt-[16px]"></div>
@@ -57,7 +98,10 @@ const VoucherCard = () => {
           </svg>
           Sửa
         </button>
-        <button className="flex gap-2 items-center justify-center py-2 bg-red-500 w-full rounded-2xl text-white">
+        <button
+          onClick={handleDeleteVoucher}
+          className="flex gap-2 items-center justify-center py-2 bg-red-500 w-full rounded-2xl text-white"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
