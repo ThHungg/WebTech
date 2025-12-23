@@ -7,8 +7,9 @@ import WarrantySection from "@/components/Common/WarrantySection";
 import formatVND from "@/utils/formatVND";
 import { memo, useState } from "react";
 import SpecialOffer from "../SpecialOffer";
+import { formatPercentage } from "@/utils/formatPercentage";
 
-const InforProduct = () => {
+const InforProduct = ({ productDetail }: { productDetail: any }) => {
   const [selectVersion, setSelectVersion] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
@@ -28,7 +29,10 @@ const InforProduct = () => {
           <p className="flex items-center gap-2 text-gray-600 text-[14px]">
             {" "}
             Thương hiệu:
-            <span className="!text-red-500 font-semibold"> Asus</span>
+            <span className="!text-red-500 font-semibold">
+              {" "}
+              {productDetail?.brand?.name}
+            </span>
             <span>|</span>
             SKU: ASUS-ROG-G16-001
           </p>
@@ -52,11 +56,13 @@ const InforProduct = () => {
           </div>
         </div>
         <h2 className="mb-[12px] font-bold">
-          Laptop Gaming ASUS ROG Strix G16 i9-13980HX
+          {productDetail?.name}{" "}
+          <span className="font-semibold text-2xl">({productDetail?.variants[selectVersion]?.name})</span>
         </h2>
         <div className="flex gap-3">
           <div className="flex items-center gap-3 font-semibold">
-            <StarRating rating={4} /> 4.0
+            <StarRating rating={productDetail?.avg_rating} />{" "}
+            {productDetail?.avg_rating}
           </div>
           <span className="text-gray-300">|</span>
           <p className="text-gray-600">127 đánh giá</p>
@@ -76,20 +82,28 @@ const InforProduct = () => {
                 d="M20 8v2h6.586L18 18.586l-4.293-4.293a1 1 0 0 0-1.414 0L2 24.586L3.414 26L13 16.414l4.293 4.293a1 1 0 0 0 1.414 0L28 11.414V18h2V8Z"
               />
             </svg>
-            256 đã bán
+            {productDetail?.total_sold} đã bán
           </p>
         </div>
       </div>
       {/* Giá sản phẩm */}
       <div className="bg-red-50 p-[20px] rounded-xl border-[1px] border-red-300 mb-[24px]">
         <p className="text-[28px] font-black text-red-500 inline-flex items-baseline gap-2 mb-[8px]">
-          {formatVND(46000000)}
+          {formatVND(productDetail?.variants[0]?.price)}
           <span className="text-[18px] text-gray-500 line-through">
-            {formatVND(52000000)}
+            {formatVND(productDetail?.variants[0]?.original_price)}
           </span>
 
           <span className="flex items-center justify-center self-center ml-2 px-2 py-2 rounded-2xl bg-red-500 text-white text-[13px] font-bold leading-none">
-            -80%
+            {Number(productDetail?.data?.variants[0]?.discount_percent) > 0
+              ? `-${formatPercentage(
+                  Number(productDetail?.data?.variants[0]?.discount_percent)
+                )}`
+              : Number(productDetail?.data?.variants[0]?.discount_amount) > 0
+              ? `-${formatVND(
+                  Number(productDetail?.data?.variants[0]?.discount_amount)
+                )}`
+              : ""}
           </span>
         </p>
         <div className="flex items-center gap-2 text-gray-500">
@@ -110,7 +124,11 @@ const InforProduct = () => {
             />
           </svg>
           <p className="">
-            Còn <span className="!text-green-500 font-bold">15</span> sản phẩm
+            Còn{" "}
+            <span className="!text-green-500 font-bold">
+              {productDetail?.total_stock}
+            </span>{" "}
+            sản phẩm
           </p>
         </div>
       </div>
@@ -255,9 +273,9 @@ const InforProduct = () => {
           Thông số sản phẩm
         </h5>
         <div className="flex flex-col w-full gap-3">
-          {specifications.map((spec, index) => (
+          {productDetail?.attributeValues?.slice(0, 6).map((att: any) => (
             <div
-              key={index}
+              key={att.id}
               className="p-[8px] bg-gray-50 flex items-center rounded-xl"
             >
               <svg
@@ -276,7 +294,7 @@ const InforProduct = () => {
                   points="2.75 8.75 6.25 12.25 13.25 4.75"
                 />
               </svg>
-              <p className="ml-2 text-gray-700">{spec}</p>
+              <p className="ml-2 text-gray-700">{att.value}</p>
             </div>
           ))}
         </div>

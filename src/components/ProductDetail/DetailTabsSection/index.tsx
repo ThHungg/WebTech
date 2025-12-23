@@ -4,7 +4,7 @@ import ProductDescription from "./ProductDescription";
 import ProductSpecs from "./ProductSpecs";
 import ProductReviews from "./ProductReviews";
 
-const DetailTabsSection = () => {
+const DetailTabsSection = ({ productDetail }: { productDetail: any }) => {
   const [activeTab, setActiveTab] = useState("description");
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">

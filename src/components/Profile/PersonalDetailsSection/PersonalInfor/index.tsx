@@ -1,9 +1,15 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import * as authServices from "../../../../services/authServices";
 import { toast } from "react-toastify";
+import { formatAddress } from "@/utils/formatAddress";
+
 const PersonalInfor = ({ userProfile }: { userProfile: any }) => {
   const [isEditing, setIsEditing] = useState(false);
   // lấy địa chỉ mặc định
+  const defaultAddress =
+    userProfile?.address?.find((addr: any) => addr.is_default) || null;  
+   
   const [formData, setFormData] = useState({
     username: "",
     phone: "",
@@ -22,18 +28,20 @@ const PersonalInfor = ({ userProfile }: { userProfile: any }) => {
   };
   const handleSave = async () => {
     try {
-      const formDataSend = new FormData();
-      formDataSend.append("username", formData.username);
-      formDataSend.append("phone", formData.phone);
-      formDataSend.append("email", formData.email);
-      // await authServices.updateUser(formDataSend);
+      const userData = {
+        username: formData.username,
+        phone: formData.phone,
+        email: formData.email,
+      };
+
+      await authServices.updateUser(userData);
       toast.success("Cập nhật thông tin thành công!");
       setIsEditing(false);
     } catch (e: any) {
-      toast.error(e.response.data.message || "Cập nhật thất bại!");
+      toast.error(e.response?.data?.message || "Cập nhật thất bại!");
     }
   };
-  
+
   return (
     <div className="col-span-3 bg-white rounded-lg shadow-sm p-6">
       <div className="flex justify-between items-center mb-4">
@@ -169,7 +177,7 @@ const PersonalInfor = ({ userProfile }: { userProfile: any }) => {
           <input
             id="diachi"
             type="text"
-            value={"so 1, Đường abc, Phường xyz, Quận 1, TP.HCM"}
+            value={formatAddress(defaultAddress)}
             disabled={!isEditing}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 text-lg  "
           />

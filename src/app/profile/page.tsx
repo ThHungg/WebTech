@@ -10,7 +10,6 @@ import PersonalDetailsSection from "@/components/Profile/PersonalDetailsSection"
 const ProfilePage = () => {
   const fetchUserProfile = async () => {
     const res = await authServices.getDetail();
-    console.log(res);
     return res;
   };
 

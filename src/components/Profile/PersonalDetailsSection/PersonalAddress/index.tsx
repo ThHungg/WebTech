@@ -75,9 +75,14 @@ const PersonalAddress = ({ userProfile }: { userProfile: any }) => {
               <div className="mx-2 text-gray-500">|</div>
               <p className="text-gray-500">{userProfile?.data?.phone}</p>
             </div>
-            <div className="flex gap-4 cursor-pointer">
-              <p onClick={() => handleEditAddress(address)}>Cập nhập</p>
-              {!address.is_default && <p>Xóa</p>}
+            <div className="flex gap-4 cursor-pointer items-center ">
+              <p
+                onClick={() => handleEditAddress(address)}
+                className="border p-1 rounded hover:bg-gray-50 "
+              >
+                Cập nhập
+              </p>
+              {!address.is_default && <p className="bg-red-600 p-1 text-white rounded">Xóa</p>}
             </div>
           </div>
           <div className="flex justify-between items-center text-gray-500">
@@ -88,11 +93,11 @@ const PersonalAddress = ({ userProfile }: { userProfile: any }) => {
             <button
               className={`border p-1 rounded ${
                 address.is_default
-                  ? "cursor-not-allowed text-gray-400 bg-gray-100"
-                  : "hover:bg-gray-50"
+                  ? "cursor-not-allowed  text-red-600"
+                  : "bg-orange-600 text-white hover:bg-orange-500 cursor-pointer"
               }`}
               disabled={address.is_default}
-                onClick={() => handleChangeDefault(address.id)}
+              onClick={() => handleChangeDefault(address.id)}
             >
               Thiết lập mặc định
             </button>

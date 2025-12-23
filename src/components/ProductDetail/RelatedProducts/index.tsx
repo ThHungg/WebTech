@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-const RelatedProducts = () => {
+const RelatedProducts = ({ productDetail }: { productDetail: any }) => {
   return (
     <div>
       <h3 className="font-bold">Sản phẩm liên quan</h3>

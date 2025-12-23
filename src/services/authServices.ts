@@ -34,6 +34,11 @@ export const refreshToken = async () => {
   return res.data;
 };
 
+export const logout = async () => {
+  const res = await axiosInstance.post("/users/logout", {}, { withCredentials: true });
+  return res.data;
+}
+
 export const getDetail = async () => {
   const res = await axiosInstance.get("/users/getUser");
   return res.data;
@@ -51,6 +56,11 @@ export const getAllUsers = async (
   return res.data;
 };
 
+export const updateUser = async (data: any) => {  
+    const res = await axiosInstance.post("/users/updateProfile", data);
+    return res.data;
+}
+
 export const updateStatusUser = async (id: number, is_active: boolean) => {
     const res = await axiosInstance.post(`/users/update/${id}`, {is_active});
     return res.data;
@@ -61,6 +71,12 @@ export const deleteUser = async (id: number) => {
     return res.data;
 }
 
+export const changePassword = async (data: any) => {
+    const res = await axiosInstance.post("/users/change-password", data);
+    return res.data;
+}
+
+// Address
 export const changeDefaultAddress = async ( addressId: number) => {
     const res = await axiosInstance.post(`/users/address/${addressId}`,{
         is_default: true

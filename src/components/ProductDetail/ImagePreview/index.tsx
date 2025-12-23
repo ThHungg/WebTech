@@ -6,7 +6,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import SpecialOffer from "../SpecialOffer";
 
-const ImagePreview = () => {
+const ImagePreview = ({ productDetail }: { productDetail: any }) => {
   const swiperBreakpoints = {
     640: { slidesPerView: 3, slidesPerGroup: 3 },
     1024: { slidesPerView: 4, slidesPerGroup: 4 },
