@@ -14,7 +14,6 @@ const ProfilePage = () => {
     return res;
   };
 
-
   const { data: userProfile = [] } = useQuery({
     queryKey: ["userProfile"],
     queryFn: fetchUserProfile,
@@ -23,9 +22,9 @@ const ProfilePage = () => {
   console.log("userProfile", userProfile);
   return (
         <div className="w-full flex flex-col  h-min-screen">
-            <ProfileBanner />
+            <ProfileBanner userProfile={userProfile}  />
             <StatisticsSection />
-            <PersonalDetailsSection />
+            <PersonalDetailsSection userProfile={userProfile} />
         </div>
     );
 };

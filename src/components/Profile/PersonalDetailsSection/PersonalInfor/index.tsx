@@ -1,7 +1,39 @@
-import { useState } from "react";
-
-const PersonalInfor = () => {
+import React, { useEffect, useState } from "react";
+import * as authServices from "../../../../services/authServices";
+import { toast } from "react-toastify";
+const PersonalInfor = ({ userProfile }: { userProfile: any }) => {
   const [isEditing, setIsEditing] = useState(false);
+  // lấy địa chỉ mặc định
+  const [formData, setFormData] = useState({
+    username: "",
+    phone: "",
+    email: "",
+  });
+  useEffect(() => {
+    setFormData({
+      username: userProfile?.data?.username || "",
+      phone: userProfile?.data?.phone || "",
+      email: userProfile?.data?.email || "",
+    });
+  }, [userProfile]);
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  const handleSave = async () => {
+    try {
+      const formDataSend = new FormData();
+      formDataSend.append("username", formData.username);
+      formDataSend.append("phone", formData.phone);
+      formDataSend.append("email", formData.email);
+      // await authServices.updateUser(formDataSend);
+      toast.success("Cập nhật thông tin thành công!");
+      setIsEditing(false);
+    } catch (e: any) {
+      toast.error(e.response.data.message || "Cập nhật thất bại!");
+    }
+  };
+  
   return (
     <div className="col-span-3 bg-white rounded-lg shadow-sm p-6">
       <div className="flex justify-between items-center mb-4">
@@ -15,7 +47,10 @@ const PersonalInfor = () => {
           }}
         >
           {isEditing ? (
-            <>
+            <div
+              className="cursor-pointer flex items-center gap-2"
+              onClick={handleSave}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"
@@ -34,9 +69,9 @@ const PersonalInfor = () => {
                 />
               </svg>
               <span>Lưu</span>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="cursor-pointer flex items-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"
@@ -49,7 +84,7 @@ const PersonalInfor = () => {
                 />
               </svg>
               <span>Chỉnh sửa</span>
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -57,16 +92,18 @@ const PersonalInfor = () => {
         <div className="grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-2">
             <label
-              htmlFor="name"
+              htmlFor="username"
               className="text-sm font-medium text-gray-700  "
             >
               Họ và tên
             </label>
             <input
-              id="name"
+              id="username"
+              name="username"
               type="text"
-              value={"Nguyễn Văn A"}
+              value={formData.username}
               disabled={!isEditing}
+              onChange={handleInputChange}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-1  text-lg"
             />
           </div>
@@ -79,9 +116,11 @@ const PersonalInfor = () => {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
-              value={"nguyenvana@email.com"}
+              value={formData.email}
               disabled={!isEditing}
+              onChange={handleInputChange}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 text-lg  "
             />
           </div>
@@ -89,16 +128,18 @@ const PersonalInfor = () => {
         <div className="grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-2">
             <label
-              htmlFor="sdt"
+              htmlFor="phone"
               className="text-sm font-medium text-gray-700  "
             >
               Số điện thoại
             </label>
             <input
-              id="sdt"
+              id="phone"
+              name="phone"
               type="text"
-              value={"123456789"}
+              value={formData.phone}
               disabled={!isEditing}
+              onChange={handleInputChange}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-1 text-lg  "
             />
           </div>
@@ -117,10 +158,11 @@ const PersonalInfor = () => {
             />
           </div>
         </div>
-        <div className="w-full flex flex-col gap-2">
+
+        <div className="w-full flex flex-col gap-2 ">
           <label
             htmlFor="diachi"
-            className="text-sm font-medium text-gray-700  "
+            className="text-sm font-medium text-gray-700 flex justify-between items-center "
           >
             Địa chỉ
           </label>

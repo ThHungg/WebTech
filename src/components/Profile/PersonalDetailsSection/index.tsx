@@ -4,9 +4,15 @@ import PersonalInfor from "./PersonalInfor";
 import PersonalOrder from "./PersonalOrder";
 import PersonalFavor from "./PersonalFavor";
 import PersonalSetting from "./PersonalSetting";
+import PersonalAddress from "./PersonalAddress";
 
-const PersonalDetailsSection = () => {
+const PersonalDetailsSection = ({
+  userProfile,
+}: {
+  userProfile: any;
+}) => {
     const [activeTab, setActiveTab] = useState("personalInfo");
+    
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-4 gap-6">
@@ -38,6 +44,40 @@ const PersonalDetailsSection = () => {
               </g>
             </svg>
             <span className="font-medium">Thông tin cá nhân</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 24 24"
+              className="ml-auto"
+            >
+              <path
+                fill="currentColor"
+                d="m14.475 12l-7.35-7.35q-.375-.375-.363-.888t.388-.887t.888-.375t.887.375l7.675 7.7q.3.3.45.675t.15.75t-.15.75t-.45.675l-7.7 7.7q-.375.375-.875.363T7.15 21.1t-.375-.888t.375-.887z"
+              />
+            </svg>
+          </button>
+          <button
+            className={`w-full px-4 py-3 flex items-center gap-3 
+          ${
+            activeTab === "addressInfo"
+              ? "bg-red-50 text-red-600 border-red-600 border-l-4 font-semibold"
+              : ""
+          }`}
+            onClick={() => setActiveTab("addressInfo")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill="currentColor"
+                d="m19.799 5.165l-2.375-1.83a2 2 0 0 0-.521-.237A2 2 0 0 0 16.336 3H9.5l.801 5h6.035c.164 0 .369-.037.566-.098s.387-.145.521-.236l2.375-1.832c.135-.091.202-.212.202-.334s-.067-.243-.201-.335M8.5 1h-1a.5.5 0 0 0-.5.5V5H3.664c-.166 0-.37.037-.567.099c-.198.06-.387.143-.521.236L.201 7.165C.066 7.256 0 7.378 0 7.5c0 .121.066.242.201.335l2.375 1.832c.134.091.323.175.521.235c.197.061.401.098.567.098H7v8.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-17a.5.5 0 0 0-.5-.5"
+              />
+            </svg>
+            <span className="font-medium">Địa chỉ</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
@@ -169,13 +209,16 @@ const PersonalDetailsSection = () => {
                 d="m17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5M4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4z"
               />
             </svg>
-            <span className="font-medium">Đăng xuất</span>
+            <span className="font-medium text-white">Đăng xuất</span>
           </button>
         </div>
-          {activeTab === "personalInfo" && <PersonalInfor />}
-          {activeTab === "order" && <PersonalOrder />}
-          {activeTab === "favorites" && <PersonalFavor />}
-          {activeTab === "settings" && <PersonalSetting />}
+        {activeTab === "personalInfo" && (
+          <PersonalInfor userProfile={userProfile} />
+        )}
+        {activeTab === "addressInfo" && <PersonalAddress userProfile={userProfile}/>}
+        {activeTab === "order" && <PersonalOrder />}
+        {activeTab === "favorites" && <PersonalFavor />}
+        {activeTab === "settings" && <PersonalSetting />}
       </div>
     </div>
   );

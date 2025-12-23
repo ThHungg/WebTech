@@ -1,6 +1,14 @@
+import Link from "next/link";
 import { memo } from "react";
+import * as authServices from "../../../services/authServices";
+import { useQuery } from "@tanstack/react-query";
 
-const ProfileBanner = () => {
+const ProfileBanner = ({
+  userProfile,
+}: {
+  userProfile: any;
+}) => {
+
   return (
     <div className="w-full bg-linear-to-r from-red-600 to-orange-600 ">
       <div className="container mx-auto px-6 py-12 flex items-center justify-between">
@@ -26,7 +34,7 @@ const ProfileBanner = () => {
             </div>
           </div>
           <div className="text-white space-y-2">
-            <h2 className="font-semibold">Nguyen Van A</h2>
+            <h2 className="font-semibold">{userProfile?.data?.username}</h2>
             <div className="flex gap-4">
               <p className="flex gap-2 items-center text-sm">
                 <svg
@@ -41,7 +49,7 @@ const ProfileBanner = () => {
                     d="m.5 6.5l11.375 7h.25l11.375-7m0-2.5v16.5H23c-3-.5-8-.75-11-.75S4 20 1 20.5H.5V4c3-.5 8.5-.75 11.5-.75s8.5.25 11.5.75Z"
                   />
                 </svg>
-                Nguyenvana@gmail.com
+                {userProfile?.data?.email}
               </p>
               <p className="flex gap-2 items-center text-sm">
                 <svg
@@ -55,7 +63,7 @@ const ProfileBanner = () => {
                     d="M19.5 22a1.5 1.5 0 0 0 1.5-1.5V17a1.5 1.5 0 0 0-1.5-1.5c-1.17 0-2.32-.18-3.42-.55a1.51 1.51 0 0 0-1.52.37l-1.44 1.44a14.77 14.77 0 0 1-5.89-5.89l1.43-1.43c.41-.39.56-.97.38-1.53c-.36-1.09-.54-2.24-.54-3.41A1.5 1.5 0 0 0 7 3H3.5A1.5 1.5 0 0 0 2 4.5C2 14.15 9.85 22 19.5 22M3.5 4H7a.5.5 0 0 1 .5.5c0 1.28.2 2.53.59 3.72c.05.14.04.34-.12.5L6 10.68c1.65 3.23 4.07 5.65 7.31 7.32l1.95-1.97c.14-.14.33-.18.51-.13c1.2.4 2.45.6 3.73.6a.5.5 0 0 1 .5.5v3.5a.5.5 0 0 1-.5.5C10.4 21 3 13.6 3 4.5a.5.5 0 0 1 .5-.5"
                   />
                 </svg>
-                0123456789
+                {userProfile?.data?.phone}
               </p>
             </div>
             <div className="rounded-full text-black bg-yellow-400  items-center font-bold p-3 inline-flex text-sm gap-1">
@@ -98,7 +106,7 @@ const ProfileBanner = () => {
               d="M64 288h294c58.76 0 106-49.33 106-108v-20"
             />
           </svg>
-          <span>Quay lại mua sắp</span>
+          <Link href="/">Quay lại mua sắp</Link>
         </button>
       </div>
     </div>

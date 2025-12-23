@@ -1,14 +1,18 @@
 import StarRating from "@/components/Common/StarRating";
+import formatVND from "@/utils/formatVND";
+import getFullImg from "@/utils/getFullImg";
 import { memo } from "react";
 
-const ProductCard = () => {
+const ProductCard = ({
+  productData,
+}: { productData: any }) => {
   return (
     <div className="group my-3 mx-2 cursor-pointer">
       {" "}
       <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-103 hover:-translate-y-1">
         <div className="aspect-square overflow-hidden relative">
           <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500"
+            src={getFullImg(productData.images[0]?.image)}
             alt=""
             className="w-full h-full object-cover hover:scale-110 transform transition-transform duration-300"
           />
@@ -38,36 +42,44 @@ const ProductCard = () => {
             </path>
           </svg>
           <div className="absolute top-2 left-2 px-3 py-1 rounded-md bg-red-500">
-            <span className="font-bold text-white text-[13px]">-80 %</span>
+            <span className="font-bold text-white text-[13px]">
+              {Number(productData?.variants[0]?.discount_percent) > 0
+                ? `-${Number(productData.variants[0].discount_percent)}%`
+                : Number(productData?.variants[0]?.discount_amount) > 0
+                ? `-${Number(
+                    productData.variants[0].discount_amount
+                  ).toLocaleString()}₫`
+                : ""}
+            </span>
           </div>
         </div>
         <div className="p-5">
-          <h6 className="mb-[8px] font-bold group-hover:text-[#E7000B] mb-[12px]">
-            Laptop Gaming ASUS ROG Strix G16
+          <h6 className="mb-[8px] font-bold group-hover:text-[#E7000B] mb-[12px]  truncate">
+            {productData.name}
           </h6>
           {/* Đánh giá */}
           <div className="flex items-center mb-[12px]">
-            <StarRating rating={4} />
+            <StarRating rating={productData.avg_rating} />
             <span className="ml-2 text-[12px] text-gray-500">(127)</span>
           </div>
           <div className="mb-4 flex gap-2">
             <div className="px-[8px] py-[4px] bg-gray-100 rounded-md flex items-center justify-center max-w-[120px]">
-              <span className="text-[12px] whitespace-nowrap overflow-hidden text-ellipsis w-full">
-                Apple M3 8-core
+              <span className="text-[12px] whitespace-nowrap overflow-hidden text-ellipsis w-[80px] ">
+                {productData?.attributeValues[0]?.value}
               </span>
             </div>
             <div className="px-[8px] py-[4px] bg-gray-100 rounded-md flex items-center justify-center w-fit">
-              <span className="text-[12px] whitespace-nowrap">
-                8GB Unified Memory
+              <span className="text-[12px] whitespace-nowrap overflow-hidden text-ellipsis w-[80px]">
+                {productData?.attributeValues[1]?.value}
               </span>
             </div>
           </div>
           <div className="mb-4">
             <p className="text-[14px] text-gray-400 line-through">
-              52.990.000&nbsp;₫
+              {formatVND(productData?.variants[0]?.original_price)}
             </p>
             <p className="text-[24px] font-bold text-red-600">
-              45.990.000&nbsp;₫
+              {formatVND(productData?.variants[0]?.price)}
             </p>
           </div>
           <button className="py-[12px] flex items-center justify-center gap-2 text-center w-full bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-lg font-semibold transition-all duration-200 hover:from-red-700 hover:to-orange-600 hover:shadow-md active:scale-95">

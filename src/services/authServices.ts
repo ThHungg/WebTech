@@ -61,3 +61,19 @@ export const deleteUser = async (id: number) => {
     return res.data;
 }
 
+export const changeDefaultAddress = async ( addressId: number) => {
+    const res = await axiosInstance.post(`/users/address/${addressId}`,{
+        is_default: true
+    });
+    return res.data;
+}
+
+export const addAddress = async ( data: any) => {
+    const res = await axiosInstance.post(`/users/address`, data);
+    return res.data;
+}
+
+export const updateAddress = async ( addressId: number, data: any) => {
+    const res = await axiosInstance.post(`/users/address/${addressId}`, data);
+    return res.data;
+}
