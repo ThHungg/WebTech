@@ -3,6 +3,9 @@
 import { memo } from "react";
 import * as authServices from "../../services/authServices";
 import { useQuery } from "@tanstack/react-query";
+import ProfileBanner from "@/components/Profile/ProfileBanner";
+import StatisticsSection from "@/components/Profile/StatisticsSection";
+import PersonalDetailsSection from "@/components/Profile/PersonalDetailsSection";
 
 const ProfilePage = () => {
   const fetchUserProfile = async () => {
@@ -17,7 +20,13 @@ const ProfilePage = () => {
   });
 
   console.log("userProfile", userProfile);
-  return <div>123</div>;
+  return (
+        <div className="w-full flex flex-col  h-min-screen">
+            <ProfileBanner userProfile={userProfile}  />
+            <StatisticsSection />
+            <PersonalDetailsSection userProfile={userProfile} />
+        </div>
+    );
 };
 
 export default memo(ProfilePage);

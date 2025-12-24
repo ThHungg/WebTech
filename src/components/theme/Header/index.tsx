@@ -14,7 +14,7 @@ const Header = () => {
     setToken(getToken());
   }, []);
   const pathname = usePathname();
-  const hiddenBanner = ["/products/", "/cart", "/checkout"];
+  const hiddenBanner = ["/products/", "/cart", "/checkout", "/profile"];
   const isHideBanner = hiddenBanner.some((url) => pathname.startsWith(url));
   const menuList = [
     {

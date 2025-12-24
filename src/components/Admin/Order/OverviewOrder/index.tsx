@@ -1,10 +1,23 @@
 import { memo } from "react";
+import * as orderServices from "../../../../services/orderServices";
+import { useQuery } from "@tanstack/react-query";
 
 const OverviewOrder = () => {
+  const fetchStatsOrder = async () => {
+    const res = await orderServices.getStatsOrder();
+    return res;
+  };
+  const { data: statsOrderResponse } = useQuery({
+    queryKey: ["stats-order"],
+    queryFn: fetchStatsOrder,
+  });
+
+  const statsOrder = statsOrderResponse?.data || {};
+
   const listOverviewOrder = [
     {
       name: "Chờ xử lý",
-      color: "bg-blue-600",
+      color: "bg-yellow-600",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -18,11 +31,12 @@ const OverviewOrder = () => {
           />
         </svg>
       ),
-      value: 1232123130,
+      value: statsOrder.pending || 0,
+      key: "pending",
     },
     {
-      name: "Đang xử lý",
-      color: "bg-green-600",
+      name: "Đã duyệt",
+      color: "bg-blue-600",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -31,18 +45,36 @@ const OverviewOrder = () => {
           viewBox="0 0 24 24"
         >
           <path
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            d="M5 5h17l-2 9H7L4 2H0m7 12l1 4h13m-2 5a1 1 0 1 1 0-2a1 1 0 0 1 0 2ZM9 23a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"
+            fill="currentColor"
+            d="M9 16.17L4.83 12l-1.42 1.41L9 19L21 7l-1.41-1.41L9 16.17z"
           />
         </svg>
       ),
-      value: 1834,
+      value: statsOrder.confirmed || 0,
+      key: "confirmed",
+    },
+    {
+      name: "Đang vận chuyển",
+      color: "bg-purple-600",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M18 18.5a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5m1.5-9l1.96 2.5H17V9.5m-11 9a1.5 1.5 0 0 1-1.5-1.5a1.5 1.5 0 0 1 1.5-1.5a1.5 1.5 0 0 1 1.5 1.5a1.5 1.5 0 0 1-1.5 1.5M3 6h15v7H3zm15-3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+          />
+        </svg>
+      ),
+      value: statsOrder.shipped || 0,
+      key: "shipped",
     },
     {
       name: "Hoàn thành",
-      color: "bg-purple-600",
+      color: "bg-green-600",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -57,11 +89,12 @@ const OverviewOrder = () => {
           />
         </svg>
       ),
-      value: 1834,
+      value: statsOrder.delivered || 0,
+      key: "delivered",
     },
     {
       name: "Đã hủy",
-      color: "bg-orange-600",
+      color: "bg-red-600",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -75,11 +108,12 @@ const OverviewOrder = () => {
           />
         </svg>
       ),
-      value: 322,
+      value: statsOrder.cancelled || 0,
+      key: "cancelled",
     },
   ];
   return (
-    <div className="grid grid-cols-4 gap-3 mb-[24px]">
+    <div className="grid grid-cols-5 gap-3 mb-[24px]">
       {listOverviewOrder.map((item, index) => (
         <div
           key={index}

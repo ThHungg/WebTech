@@ -1,81 +1,95 @@
 "use client";
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 
 interface Variant {
-  id: number;
+  // id: number;
   name: string;
+  original_price: string;
   price: string;
-  discountType: string;
-  discountValue: string;
-  salePrice: string;
-  quantity: string;
+  discount_amount: string;
+  discount_percent: string;
+  stock: string;
 }
 
-const ProductVariants = () => {
+const ProductVariants = ({
+  setVariantsData,
+}: {
+  setVariantsData: (data: any[]) => void;
+}) => {
   const [variants, setVariants] = useState<Variant[]>([
     {
-      id: 1,
       name: "",
+      original_price: "",
       price: "",
-      discountType: "",
-      discountValue: "",
-      salePrice: "",
-      quantity: "",
+      discount_amount: "",
+      discount_percent: "",
+      stock: "",
     },
   ]);
 
-  const [nextId, setNextId] = useState(2);
+  // Sync data to parent whenever variants change
+  useEffect(() => {
+    const formattedVariants = variants
+      .filter((v) => v.original_price.trim() !== "" && v.stock.trim() !== "")
+      .map((variant) => ({
+        name: variant.name || "Default",
+        original_price: parseInt(variant.original_price) || 0,
+        price: parseInt(variant.price) || parseInt(variant.original_price) || 0,
+        discount_amount: parseInt(variant.discount_amount) || 0,
+        discount_percent: parseInt(variant.discount_percent) || 0,
+        stock: parseInt(variant.stock) || 0,
+      }));
+    setVariantsData(formattedVariants);
+  }, [variants, setVariantsData]);
 
   const handleAddVariant = () => {
     setVariants([
       ...variants,
       {
-        id: nextId,
         name: "",
+        original_price: "",
         price: "",
-        discountType: "",
-        discountValue: "",
-        salePrice: "",
-        quantity: "",
+        discount_amount: "",
+        discount_percent: "",
+        stock: "",
       },
     ]);
-    setNextId(nextId + 1);
   };
 
   const handleVariantChange = (
-    id: number,
+    index: number,
     field: keyof Variant,
     value: string
   ) => {
     setVariants(
-      variants.map((variant) =>
-        variant.id === id ? { ...variant, [field]: value } : variant
+      variants.map((variant, i) =>
+        i === index ? { ...variant, [field]: value } : variant
       )
     );
   };
 
-  const handleRemoveVariant = (id: number) => {
+  const handleRemoveVariant = (index: number) => {
     if (variants.length > 1) {
-      setVariants(variants.filter((variant) => variant.id !== id));
+      setVariants(variants.filter((_, i) => i !== index));
     }
   };
 
-  const calculateSalePrice = (
-    price: string,
-    discountType: string,
-    discountValue: string
+  const calculatePrice = (
+    original_price: string,
+    discount_type: string,
+    discount_value: string
   ) => {
-    if (!price || !discountValue) return "";
+    if (!original_price || !discount_value) return original_price;
 
-    const priceNum = parseFloat(price);
-    const discountNum = parseFloat(discountValue);
+    const priceNum = parseFloat(original_price);
+    const discountNum = parseFloat(discount_value);
 
-    if (discountType === "percent") {
+    if (discount_type === "percent") {
       return (priceNum - (priceNum * discountNum) / 100).toFixed(0);
-    } else if (discountType === "fixed") {
+    } else if (discount_type === "fixed") {
       return (priceNum - discountNum).toFixed(0);
     }
-    return "";
+    return original_price;
   };
 
   return (
@@ -112,7 +126,7 @@ const ProductVariants = () => {
       <div className="max-h-[60vh] overflow-y-auto pr-2">
         {variants.map((variant, index) => (
           <div
-            key={variant.id}
+            key={index}
             className="mb-6 pb-6 border border-gray-200 rounded-2xl p-3"
           >
             {/* Tên biến thể */}
@@ -123,7 +137,7 @@ const ProductVariants = () => {
               {variants.length > 1 && (
                 <button
                   type="button"
-                  onClick={() => handleRemoveVariant(variant.id)}
+                  onClick={() => handleRemoveVariant(index)}
                   className="text-red-500 hover:bg-red-100 p-1 rounded-lg transition"
                 >
                   <svg
@@ -151,66 +165,80 @@ const ProductVariants = () => {
                 placeholder="Nhập tên biến thể (vd: Màu đen, 8GB RAM, ...)"
                 value={variant.name}
                 onChange={(e) =>
-                  handleVariantChange(variant.id, "name", e.target.value)
+                  handleVariantChange(index, "name", e.target.value)
                 }
                 className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
               />
             </div>
 
-            {/* Giá và Giảm giá */}
+            {/* Giá gốc và Giảm giá */}
             <div className="flex gap-4">
               <div className="flex flex-col mb-[12px] w-full">
                 <label className="text-[14px] font-semibold mb-[6px]">
-                  Giá
+                  Giá gốc
                 </label>
                 <input
                   type="number"
-                  placeholder="Nhập giá sản phẩm"
-                  value={variant.price}
+                  placeholder="Nhập giá gốc sản phẩm"
+                  value={variant.original_price}
                   onChange={(e) =>
-                    handleVariantChange(variant.id, "price", e.target.value)
+                    handleVariantChange(index, "original_price", e.target.value)
                   }
                   className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
                 />
               </div>
 
               <div className="flex gap-2 w-full">
-                <div className="flex flex-col mb-[12px] w-3/5">
+                <div className="flex flex-col mb-[12px] w-1/2">
                   <label className="text-[14px] font-semibold mb-[6px]">
-                    Giảm giá
+                    Loại giảm
                   </label>
                   <select
-                    value={variant.discountType}
-                    onChange={(e) =>
-                      handleVariantChange(
-                        variant.id,
-                        "discountType",
-                        e.target.value
-                      )
+                    value={
+                      variant.discount_percent
+                        ? "percent"
+                        : variant.discount_amount
+                        ? "fixed"
+                        : ""
                     }
+                    onChange={(e) => {
+                      if (e.target.value === "percent") {
+                        handleVariantChange(index, "discount_amount", "");
+                      } else {
+                        handleVariantChange(index, "discount_percent", "");
+                      }
+                    }}
                     className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
                   >
-                    <option value="">Chọn loại</option>
+                    <option value="">Không giảm</option>
                     <option value="percent">Phần trăm (%)</option>
-                    <option value="fixed">Mức giảm</option>
+                    <option value="fixed">Mức giảm (VNĐ)</option>
                   </select>
                 </div>
 
-                <div className="flex flex-col mb-[12px] w-2/5">
+                <div className="flex flex-col mb-[12px] w-1/2">
                   <label className="text-[14px] font-semibold mb-[6px]">
                     Giá trị
                   </label>
                   <input
                     type="number"
-                    placeholder="Nhập giá trị giảm"
-                    value={variant.discountValue}
-                    onChange={(e) =>
-                      handleVariantChange(
-                        variant.id,
-                        "discountValue",
-                        e.target.value
-                      )
-                    }
+                    placeholder="Nhập giá trị"
+                    value={variant.discount_percent || variant.discount_amount}
+                    onChange={(e) => {
+                      if (variant.discount_percent) {
+                        handleVariantChange(
+                          index,
+                          "discount_percent",
+                          e.target.value
+                        );
+                      } else {
+                        handleVariantChange(
+                          index,
+                          "discount_amount",
+                          e.target.value
+                        );
+                      }
+                    }}
                     className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
                   />
                 </div>
@@ -226,10 +254,10 @@ const ProductVariants = () => {
                 <input
                   readOnly
                   type="text"
-                  value={calculateSalePrice(
-                    variant.price,
-                    variant.discountType,
-                    variant.discountValue
+                  value={calculatePrice(
+                    variant.original_price,
+                    variant.discount_percent ? "percent" : "fixed",
+                    variant.discount_percent || variant.discount_amount
                   )}
                   className="border-[1px] bg-gray-50 border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
                 />
@@ -242,9 +270,9 @@ const ProductVariants = () => {
                 <input
                   type="number"
                   placeholder="Nhập số lượng tồn kho"
-                  value={variant.quantity}
+                  value={variant.stock}
                   onChange={(e) =>
-                    handleVariantChange(variant.id, "quantity", e.target.value)
+                    handleVariantChange(index, "stock", e.target.value)
                   }
                   className="border-[1px] border-gray-200 rounded-lg px-[16px] py-[8px] focus:outline-none focus:border-blue-500 w-full"
                 />
