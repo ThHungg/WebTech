@@ -14,3 +14,8 @@ export const deleteVoucher = async (voucherId: number) => {
     const res = await axiosInstance.delete(`/vouchers/delete/${voucherId}`);
     return res.data;
 }
+
+export const applyVoucher = async (code: string) => {
+    const res = await axiosInstance.post("/vouchers/apply", {code});
+    return res.data;
+}

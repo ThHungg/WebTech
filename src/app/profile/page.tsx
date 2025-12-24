@@ -20,12 +20,12 @@ const ProfilePage = () => {
 
   console.log("userProfile", userProfile);
   return (
-        <div className="w-full flex flex-col  h-min-screen">
-            <ProfileBanner userProfile={userProfile}  />
-            <StatisticsSection />
-            <PersonalDetailsSection userProfile={userProfile} />
-        </div>
-    );
+    <div className="w-full flex flex-col  h-min-screen">
+      <ProfileBanner userProfile={userProfile} />
+      <StatisticsSection />
+      <PersonalDetailsSection userProfile={userProfile} />
+    </div>
+  );
 };
 
 export default memo(ProfilePage);

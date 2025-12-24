@@ -15,6 +15,9 @@ const ProductTable = () => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null
   );
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
+
   const [productStates, setProductStates] = useState<{
     [key: number]: boolean;
   }>({});
@@ -22,15 +25,26 @@ const ProductTable = () => {
   console.log("Selected Product ID:", selectedProductId);
 
   const fetchAllProducts = async () => {
-    const res = await productServices.getAllProducts();
+    const res = await productServices.getAllProducts(page, limit);
     return res;
   };
 
   const { data: products, refetch } = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", page, limit],
     queryFn: fetchAllProducts,
     refetchOnWindowFocus: false,
   });
+
+  console.log(page, limit);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
+    setPage(1);
+  };
 
   const handleUpdateStatus = async (
     productId: number,
@@ -306,7 +320,14 @@ const ProductTable = () => {
           </tbody>
         </table>
       </div>
-      {/* <Pagination /> */}
+      <Pagination
+        page={page}
+        limit={limit}
+        total={products?.total || 0}
+        onPageChange={handlePageChange}
+        onLimitChange={handleLimitChange}
+      />
+
       {showProductDetailModal && (
         <ProductDetailModal
           selectedProductId={selectedProductId}

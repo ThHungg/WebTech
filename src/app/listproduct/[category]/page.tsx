@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import Filter from "@/components/ListProduct/Filter";
 import ListProductSection from "@/components/ListProduct/ListProductSection";
 import ViewAndSortControls from "@/components/ListProduct/ViewAndSortControls";
-import { memo, use } from "react";
+import { memo, use, useState } from "react";
 import * as productServices from "../../../services/productServices";
 import { useQuery } from "@tanstack/react-query";
 const ListProductPage = ({
@@ -10,11 +10,13 @@ const ListProductPage = ({
 }: {
   params: Promise<{ category: string }>;
 }) => {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(12);
   const { category } = use(params);
   console.log("category", category);
-  const { data: products = [], refetch} = useQuery({
-    queryKey: ["products"],
-    queryFn: () => productServices.getBySlug(category),
+  const { data: products = {}, refetch } = useQuery({
+    queryKey: ["products", category, page, limit],
+    queryFn: () => productServices.getBySlug(category, page, limit),
   });
   return (
     <div className="bg-[#F9FAFC]">
@@ -23,7 +25,13 @@ const ListProductPage = ({
           <Filter />
           <div className="flex flex-col w-full">
             <ViewAndSortControls />
-            <ListProductSection products={products} />
+            <ListProductSection
+              products={products}
+              page={page}
+              limit={limit}
+              setPage={setPage}
+              setLimit={setLimit}
+            />
           </div>
         </div>
       </div>

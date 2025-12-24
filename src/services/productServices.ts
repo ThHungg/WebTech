@@ -16,8 +16,10 @@ export const updateProductStatus = async (id: number, status: boolean) => {
     return res.data;
 }
 
-export const getAllProducts = async () => {
-    const res = await axiosInstance.get("/products/getAll");
+export const getAllProducts = async ( page: number = 1,
+  limit: number = 10,) => {
+    const params: any = { page, limit };
+    const res = await axiosInstance.get("/products/getAll", { params });
     return res.data;
 }
 
@@ -31,7 +33,8 @@ export const getDetailProduct = async (id: number) => {
     return res.data;
 }
 
-export const getBySlug = async (slug: string) => {
-    const res = await axiosInstance.get(`/products/getBySlug/${slug}`);
+export const getBySlug = async (slug: string, page: number = 1, limit: number = 12) => {
+    const params: any = { page, limit };
+    const res = await axiosInstance.get(`/products/getBySlug/${slug}`, { params });
     return res.data;
 }

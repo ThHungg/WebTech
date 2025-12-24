@@ -42,9 +42,9 @@ const Header = () => {
         submenu:
           category.children?.map((child: any) => ({
             name: child.name,
-            link: `/listproduct?category=${child.slug}`,
+            link: `/listproduct/${child.slug}`,
           })) || [],
-        parentLink: `/listproduct?category=${category.slug}`,
+        parentLink: `/listproduct/${category.slug}`,
       }))
     : [];
 
@@ -344,23 +344,25 @@ const Header = () => {
                   onMouseEnter={() => setHoveredMenu(index)}
                   onMouseLeave={() => setHoveredMenu(null)}
                 >
-                  <button className="flex text-[15px] text-[#5E5C6E] font-semibold items-center gap-2 hover:bg-[#F3F4F6] p-2 rounded-md transition-colors">
-                    {item.icon}
-                    {item.title}
-                    {item.submenu && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        className={`transition-transform ${
-                          hoveredMenu === index ? "rotate-180" : ""
-                        }`}
-                      >
-                        <path fill="currentColor" d="M7 10l5 5 5-5z" />
-                      </svg>
-                    )}
-                  </button>
+                  <Link href={item.parentLink}>
+                    <button className="flex text-[15px] text-[#5E5C6E] font-semibold items-center gap-2 hover:bg-[#F3F4F6] p-2 rounded-md transition-colors">
+                      {item.icon}
+                      {item.title}
+                      {item.submenu && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          className={`transition-transform ${
+                            hoveredMenu === index ? "rotate-180" : ""
+                          }`}
+                        >
+                          <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                        </svg>
+                      )}
+                    </button>
+                  </Link>
 
                   {item.submenu && (
                     <div
