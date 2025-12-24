@@ -13,7 +13,7 @@ const ListProductSection = () => {
     queryKey: ["products"],
     queryFn: fetchAllProducts,
   });
-  console.log(products);
+
   return (
     <div className="grid grid-cols-3">
       {products?.data?.map((product: any) => (
