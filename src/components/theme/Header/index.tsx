@@ -42,8 +42,9 @@ const Header = () => {
         submenu:
           category.children?.map((child: any) => ({
             name: child.name,
-            link: `/products?category=${child.id}`,
+            link: `/listproduct?category=${child.slug}`,
           })) || [],
+        parentLink: `/listproduct?category=${category.slug}`,
       }))
     : [];
 
@@ -83,7 +84,7 @@ const Header = () => {
   //           strokeLinecap="round"
   //           strokeLinejoin="round"
   //           strokeWidth="1.5"
-  //           d="M9 20h3m3 0h-3m0 0v-3m0 0h7a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2z"
+  //           d="M9 20h3m3 0h-3m0 0v-3m0 0h7a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h7v3z"
   //         />
   //       </svg>
   //     ),

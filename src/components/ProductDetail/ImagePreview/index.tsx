@@ -1,84 +1,96 @@
 "use client";
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import SpecialOffer from "../SpecialOffer";
+import getFullImg from "@/utils/getFullImg";
+import { formatPercentage } from "@/utils/formatPercentage";
 
-const ImagePreview = ({ productDetail }: { productDetail: any }) => {
+const ImagePreview = ({
+  productDetail,
+  selectVersion,
+  setSelectVersion,
+}: {
+  productDetail: any;
+  selectVersion: number;
+  setSelectVersion: React.Dispatch<React.SetStateAction<number>>;
+}) => {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
   const swiperBreakpoints = {
     640: { slidesPerView: 3, slidesPerGroup: 3 },
-    1024: { slidesPerView: 4, slidesPerGroup: 4 },
+    1024: { slidesPerView: 5, slidesPerGroup: 5 },
   };
+
+  const handleImageSelect = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
+  console.log("productDetail in ImagePreview", productDetail);
   return (
     <div>
       <div className="p-[16px] bg-white rounded-xl shadow-md w-full border-[1px] border-gray-200">
         <div className="aspect-square mb-[12px] rounded-xl overflow-hidden relative">
           <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800"
+            src={getFullImg(productDetail?.images[selectedImageIndex]?.image)}
             alt=""
-            className="w-full h-full"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute top-2 left-2 px-3 py-1 rounded-md bg-red-500">
-            <span className="font-bold text-white text-[13px]">-80 %</span>
-          </div>
+          {Number(
+            productDetail?.variants?.[selectVersion]?.discount_percent
+          ) !== 0 ||
+          Number(productDetail?.variants?.[selectVersion]?.discount_amount) !==
+            0 ? (
+            <div className="absolute top-2 left-2 px-3 py-1 rounded-md bg-red-500">
+              {Number(
+                productDetail?.variants?.[selectVersion]?.discount_percent
+              ) !== 0 ? (
+                <span className="text-white font-semibold text-sm">
+                  -
+                  {formatPercentage(
+                    productDetail?.variants?.[selectVersion]?.discount_percent
+                  )}
+                </span>
+              ) : (
+                <span className="text-white font-semibold text-sm">
+                  -
+                  {formatPercentage(
+                    productDetail?.variants?.[selectVersion]?.discount_amount
+                  )}
+                </span>
+              )}
+            </div>
+          ) : null}
         </div>
         <div className="flex items-center justify-center py-2">
           <Swiper
-            spaceBetween={2}
+            spaceBetween={5}
             navigation={true}
             modules={[Navigation]}
             className="mySwiper"
             breakpoints={swiperBreakpoints}
           >
-            {[...Array(9)].map((_, i) => (
-              <SwiperSlide key={i}>
-                <button className="w-[90px] h-[90px] p-1 overflow-hidden mr-[8px]">
+            {productDetail?.images?.map((image: any, index: number) => (
+              <SwiperSlide key={index}>
+                <button
+                  onClick={() => handleImageSelect(index)}
+                  className={`w-full h-auto overflow-hidden mr-[8px] rounded-2xl transition-all ${
+                    selectedImageIndex === index
+                      ? "border-2 border-red-500"
+                      : "border-2 border-gray-300"
+                  }`}
+                >
                   <img
-                    src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800"
-                    alt=""
-                    className="w-full h-full object-cover transition-transform duration-200 hover:scale-105 rounded-2xl"
+                    src={getFullImg(image.image)}
+                    alt={`Product Image ${index + 1}`}
+                    className="w-full h-full object-contain transition-transform duration-200 hover:scale-105"
                   />
                 </button>
               </SwiperSlide>
             ))}
           </Swiper>
-          {/* <button className="w-[90px] h-[90px] p-1 overflow-hidden mr-[8px]">
-          <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800"
-            alt=""
-            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105 rounded-2xl"
-          />
-        </button>
-        <button className="w-[90px] h-[90px] p-1 overflow-hidden mr-[8px]">
-          <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800"
-            alt=""
-            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105 rounded-2xl"
-          />
-        </button>
-        <button className="w-[90px] h-[90px] p-1 overflow-hidden mr-[8px]">
-          <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800"
-            alt=""
-            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105 rounded-2xl"
-          />
-        </button>
-        <button className="w-[90px] h-[90px] p-1 overflow-hidden mr-[8px]">
-          <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800"
-            alt=""
-            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105 rounded-2xl"
-          />
-        </button>
-        <button className="w-[90px] h-[90px] p-1 overflow-hidden mr-[8px]">
-          <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800"
-            alt=""
-            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105 rounded-2xl"
-          />
-        </button> */}
         </div>
         <div className="grid grid-cols-2 gap-4 mt-4">
           <button className="border border-gray-300 rounded-lg px-4 py-2 flex items-center justify-center gap-2">

@@ -5,7 +5,9 @@ import InforProduct from "../InforProduct";
 import RelatedProducts from "../RelatedProducts";
 import * as productServices from "../../../services/productServices";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 const ProductDetailClient = ({ productId }: { productId: string }) => {
+  const [selectVersion, setSelectVersion] = useState(0);
   const fetchProductDetail = async () => {
     const res = await productServices.getDetailProduct(Number(productId));
     return res;
@@ -20,19 +22,27 @@ const ProductDetailClient = ({ productId }: { productId: string }) => {
       <div className="grid grid-cols-12 gap-x-[24px]">
         <div className="col-span-5">
           <div className="sticky top-[169px]">
-            <ImagePreview productDetail={productDetail} />
+            <ImagePreview
+              selectVersion={selectVersion}
+              setSelectVersion={setSelectVersion}
+              productDetail={productDetail?.data}
+            />
           </div>
         </div>
 
         <div className="col-span-7">
-          <InforProduct productDetail={productDetail?.data} />
+          <InforProduct
+            selectVersion={selectVersion}
+            setSelectVersion={setSelectVersion}
+            productDetail={productDetail?.data}
+          />
         </div>
       </div>
       <div className="mt-[24px]">
-        <DetailTabsSection productDetail={productDetail} />
+        <DetailTabsSection productDetail={productDetail?.data} />
       </div>
       <div className="mt-[24px]">
-        <RelatedProducts productDetail={productDetail} />
+        <RelatedProducts productDetail={productDetail?.data} />
       </div>
     </div>
   );
