@@ -1,19 +1,9 @@
 "use client";
 import ProductCard from "@/components/Card/ProductCard";
 import { memo } from "react";
-import * as productServices from "../../../services/productServices";
-import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-const ListProductSection = () => {
-  const fetchAllProducts = async () => {
-    const res = await productServices.getAllProducts();
-    return res;
-  };
-  const { data: products = [], refetch } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchAllProducts,
-  });
-
+const ListProductSection = ({ products } : {products : any}) => {
+  
   return (
     <div className="grid grid-cols-3">
       {products?.data?.map((product: any) => (

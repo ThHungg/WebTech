@@ -30,3 +30,8 @@ export const getDetailProduct = async (id: number) => {
     const res = await axiosInstance.get(`/products/detail/${id}`);
     return res.data;
 }
+
+export const getBySlug = async (slug: string) => {
+    const res = await axiosInstance.get(`/products/getBySlug/${slug}`);
+    return res.data;
+}
