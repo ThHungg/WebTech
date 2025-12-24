@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { formatDate } from "@/utils/formatDate";
 
 const OrderTable = () => {
-  const [openDetailModa, setOpenDetailModal] = useState(false);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<number>(0);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -26,10 +26,12 @@ const OrderTable = () => {
   const { data: ordersData = {}, refetch } = useQuery({
     queryKey: ["orders", page, limit, search, status],
     queryFn: fetchAllOrders,
+    refetchOnWindowFocus: false,
   });
 
   const orders = ordersData?.data || [];
-  const pagination = ordersData?.pagination || {};
+  const totalOrders = ordersData?.total || 0;
+  const totalPages = Math.ceil(totalOrders / limit);
 
   const handleSearch = (searchValue: string) => {
     setSearch(searchValue);
@@ -38,6 +40,15 @@ const OrderTable = () => {
 
   const handleFilterStatus = (statusValue: string) => {
     setStatus(statusValue);
+    setPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    setLimit(newLimit);
     setPage(1);
   };
 
@@ -231,11 +242,11 @@ const OrderTable = () => {
         <Pagination
           page={page}
           limit={limit}
-          total={pagination?.total || 0}
-          onPageChange={setPage}
-          onLimitChange={setLimit}
+          total={totalOrders}
+          onPageChange={handlePageChange}
+          onLimitChange={handleLimitChange}
         />
-        {openDetailModa && (
+        {openDetailModal && (
           <OrderDetailModal
             orderId={selectedOrderId}
             onClose={() => setOpenDetailModal(false)}

@@ -4,8 +4,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import CategoryCard from "../../Card/CategoryCard";
-
+import { useQuery } from "@tanstack/react-query";
+import * as categoryServices from "../../../services/categoryServices";
 const CategorySection = () => {
+  const { data: categories = [], refetch} = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => categoryServices.getAllCategories(),
+  });
+  console.log("categories", categories);
   return (
     <div className="py-[64px] bg-gradient-to-b from-white to-gray-50">
       <div className="container px-4">
@@ -28,24 +34,12 @@ const CategorySection = () => {
               0: { slidesPerView: 1 },
             }}
           >
-            <SwiperSlide>
-              <CategoryCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CategoryCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CategoryCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CategoryCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CategoryCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <CategoryCard />
-            </SwiperSlide>
+            {categories?.data?.map((category: any) => (
+              <SwiperSlide key={category.id}>
+                <CategoryCard categoryData={category} />
+              </SwiperSlide>
+            ))}
+            
           </Swiper>
         </div>
       </div>

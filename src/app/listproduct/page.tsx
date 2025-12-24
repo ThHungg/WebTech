@@ -2,22 +2,19 @@
 import Filter from "@/components/ListProduct/Filter";
 import ListProductSection from "@/components/ListProduct/ListProductSection";
 import ViewAndSortControls from "@/components/ListProduct/ViewAndSortControls";
-import { memo, use, useState } from "react";
-import * as productServices from "../../../services/productServices";
+import { memo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-const ListProductPage = ({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}) => {
+import * as productServices from "../../services/productServices";
+
+const ListProductPage = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(12);
-  const { category } = use(params);
-  console.log("category", category);
-  const { data: products = {}, refetch } = useQuery({
-    queryKey: ["products", category, page, limit],
-    queryFn: () => productServices.getBySlug(category, page, limit),
+
+  const { data: products = {} } = useQuery({
+    queryKey: ["products", page, limit],
+    queryFn: () => productServices.getAllProducts(page, limit),
   });
+
   return (
     <div className="bg-[#F9FAFC]">
       <div className="container px-[16px] py-[32px]">

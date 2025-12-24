@@ -1,8 +1,14 @@
 "use client";
-import { memo, useState } from "react";
+import { memo } from "react";
 
-const PaymenMethod = () => {
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+const PaymenMethod = ({ formData, setFormData }: any) => {
+  const handlePaymentChange = (method: string) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      payment_method: method,
+    }));
+  };
+
   return (
     <div className="p-[16px] bg-blue-50 border border-blue-200 rounded-lg">
       <p className="text-[14px] text-blue-900 font-semibold mb-[8px] flex items-center gap-2">
@@ -21,15 +27,19 @@ const PaymenMethod = () => {
       </p>
       <div className="space-y-2">
         <div
-          onClick={() => setPaymentMethod("COD")}
-          className={`p-[16px] rounded-[10px] ${
-            paymentMethod === "COD"
+          onClick={() => handlePaymentChange("COD")}
+          className={`p-[16px] rounded-[10px] cursor-pointer ${
+            formData.payment_method === "COD"
               ? "bg-red-50 border-[1px] border-red-500"
               : "bg-gray-50 hover:bg-gray-100"
           }`}
         >
           <div className="flex items-center gap-2">
-            <input type="radio" checked={paymentMethod === "COD"} />
+            <input
+              type="radio"
+              checked={formData.payment_method === "COD"}
+              onChange={() => handlePaymentChange("COD")}
+            />
             <div className="p-[12px] bg-white rounded-[10px]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -58,15 +68,19 @@ const PaymenMethod = () => {
           </div>
         </div>
         <div
-          onClick={() => setPaymentMethod("BANK")}
-          className={`p-[16px] rounded-[10px] ${
-            paymentMethod === "BANK"
+          onClick={() => handlePaymentChange("BANK")}
+          className={`p-[16px] rounded-[10px] cursor-pointer ${
+            formData.payment_method === "BANK"
               ? "bg-red-50 border-[1px] border-red-500"
               : "bg-gray-50 hover:bg-gray-100"
           }`}
         >
           <div className="flex items-center gap-2">
-            <input type="radio" checked={paymentMethod === "BANK"} />
+            <input
+              type="radio"
+              checked={formData.payment_method === "BANK"}
+              onChange={() => handlePaymentChange("BANK")}
+            />
             <div className="p-[12px] bg-white rounded-[10px]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

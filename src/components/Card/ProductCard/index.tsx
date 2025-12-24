@@ -1,4 +1,5 @@
 import StarRating from "@/components/Common/StarRating";
+import { formatPercentage } from "@/utils/formatPercentage";
 import formatVND from "@/utils/formatVND";
 import getFullImg from "@/utils/getFullImg";
 import { memo } from "react";
@@ -8,7 +9,6 @@ const ProductCard = ({
 }: { productData: any }) => {
   return (
     <div className="group my-3 mx-2 cursor-pointer">
-      {" "}
       <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-103 hover:-translate-y-1">
         <div className="aspect-square overflow-hidden relative">
           <img
@@ -44,11 +44,13 @@ const ProductCard = ({
           <div className="absolute top-2 left-2 px-3 py-1 rounded-md bg-red-500">
             <span className="font-bold text-white text-[13px]">
               {Number(productData?.variants[0]?.discount_percent) > 0
-                ? `-${Number(productData.variants[0].discount_percent)}%`
+                ? `-${formatPercentage(
+                    Number(productData.variants[0].discount_percent)
+                  )}`
                 : Number(productData?.variants[0]?.discount_amount) > 0
-                ? `-${Number(
-                    productData.variants[0].discount_amount
-                  ).toLocaleString()}₫`
+                ? `-${formatVND(
+                    Number(productData.variants[0].discount_amount)
+                  )}`
                 : ""}
             </span>
           </div>

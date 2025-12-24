@@ -1,5 +1,10 @@
 import axiosInstance from "./axiosInstance";
 
+export const createOrder = async (orderData: any) => {
+    const res = await axiosInstance.post("/orders/create", orderData);
+    return res.data;
+}
+
 export const getAllOrders = async (
   page: number = 1,
   limit: number = 10,
@@ -10,6 +15,15 @@ export const getAllOrders = async (
   if (status) params.status = status;
   const res = await axiosInstance.get("/orders/getAll", { params });
   return res.data;
+}
+
+export const getOrdersByUser = async (
+  page: number = 1,
+  limit: number = 10,
+) => {
+    const params: any = { page, limit };
+    const res = await axiosInstance.get("/orders/getOrderByUser", { params });
+    return res.data;
 }
 
 export const getOrderById = async (orderId: number) => {

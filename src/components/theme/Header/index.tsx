@@ -6,118 +6,149 @@ import { memo, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import CartSidebar from "@/components/CartSidebar";
 import getToken from "@/utils/getToken";
+import * as categoryService from "../../../services/categoryServices";
+import { useQuery } from "@tanstack/react-query";
+import { title } from "process";
 
 const Header = () => {
   const [isOpenCartSidebar, setIsOpenCartSidebar] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [hoveredMenu, setHoveredMenu] = useState<number | null>(null);
+
   useEffect(() => {
     setToken(getToken());
   }, []);
+
   const pathname = usePathname();
   const hiddenBanner = ["/products/", "/cart", "/checkout", "/profile"];
   const isHideBanner = hiddenBanner.some((url) => pathname.startsWith(url));
-  const menuList = [
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M4 6h16v10H4m16 2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4c-1.11 0-2 .89-2 2v10a2 2 0 0 0 2 2H0v2h24v-2z"
-          />
-        </svg>
-      ),
-      title: "Laptop",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.5"
-            d="M9 20h3m3 0h-3m0 0v-3m0 0h7a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2z"
-          />
-        </svg>
-      ),
-      title: "PC Desktop",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          viewBox="0 0 24 24"
-        >
-          <g fill="none" fillRule="evenodd">
-            <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-            <path
-              fill="currentColor"
-              d="M15 2a1 1 0 0 1 1 1v1h1a3 3 0 0 1 3 3v1h1a1 1 0 1 1 0 2h-1v4h1a1 1 0 1 1 0 2h-1v1a3 3 0 0 1-3 3h-1v1a1 1 0 1 1-2 0v-1h-4v1a1 1 0 1 1-2 0v-1H7a3 3 0 0 1-3-3v-1H3a1 1 0 1 1 0-2h1v-4H3a1 1 0 0 1 0-2h1V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 2 0v1h4V3a1 1 0 0 1 1-1m2 4H7a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1m-3 2a2 2 0 0 1 1.995 1.85L16 10v4a2 2 0 0 1-1.85 1.995L14 16h-4a2 2 0 0 1-1.995-1.85L8 14v-4a2 2 0 0 1 1.85-1.995L10 8zm0 2h-4v4h4z"
-            />
-          </g>
-        </svg>
-      ),
-      title: "Phụ kiện",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          viewBox="0 0 24 24"
-        >
-          <g fill="none">
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeWidth="1.5"
-              d="M19 17v1m-2.5-1v1M14 17v1m-2.5-1v1"
-              opacity=".4"
-            />
-            <path
-              fill="currentColor"
-              d="m19 5.118l.72-.21l-.002-.007l-.003-.009zm-14 0l-.715-.226l-.003.009l-.002.008zM2.889 20.643l.433-.612zm-.552-.584l.634-.4zm19.326 0l-.634-.4zm-.552.584l-.433-.612zm0-6.698l-.433.612zm.552.584l-.634.4zm-18.774-.584l.433.612zm-.552.584l.634.4zM7.5 3.75h9v-1.5h-9zm9 0c.428 0 .753.1 1.016.305c.269.21.549.59.769 1.288l1.43-.45c-.28-.89-.698-1.57-1.277-2.021c-.587-.457-1.261-.622-1.938-.622zm-9-1.5c-.676 0-1.351.165-1.938.622c-.58.451-.997 1.13-1.277 2.02l1.43.45c.22-.697.5-1.077.77-1.287c.262-.205.587-.305 1.015-.305zm10.78 3.076l2.851 9.839l1.44-.418l-2.85-9.838zm-14-.417l-2.852 9.838l1.44.418L5.72 5.326zm1.22 9.43h13v-1.5h-13zm13 5.911h-13v1.5h13zm-13 0c-.719 0-1.198-.001-1.563-.04c-.35-.038-.509-.104-.615-.18l-.866 1.225c.398.282.842.395 1.32.446c.464.05 1.038.049 1.724.049zm-4.25-2.956c0 .729 0 1.329.046 1.812c.047.493.15.945.407 1.353l1.268-.8c-.08-.126-.145-.313-.182-.697c-.038-.394-.039-.91-.039-1.668zm2.072 2.737a1.3 1.3 0 0 1-.35-.372l-1.27.8c.198.313.453.584.754.796zm17.928-2.737c0 .758 0 1.274-.039 1.668c-.037.384-.103.57-.182.697l1.268.8c.258-.408.36-.86.407-1.353c.047-.483.046-1.083.046-1.812zM18.5 21.75c.686 0 1.26.001 1.723-.049c.479-.052.923-.164 1.321-.446l-.866-1.224c-.106.075-.265.141-.615.179c-.365.039-.844.04-1.563.04zm2.529-2.091a1.3 1.3 0 0 1-.351.372l.866 1.224c.3-.212.556-.483.753-.796zm-2.529-5.32c.719 0 1.198 0 1.563.04c.35.037.509.103.615.178l.866-1.224c-.398-.282-.842-.394-1.32-.446c-.464-.05-1.038-.049-1.724-.049zm4.25 2.955c0-.729 0-1.329-.046-1.811c-.047-.494-.15-.946-.407-1.354l-1.268.8c.08.127.145.313.182.697c.038.394.039.91.039 1.668zm-2.072-2.737c.136.097.256.223.35.373l1.27-.8a2.8 2.8 0 0 0-.754-.797zM5.5 12.838c-.686 0-1.26 0-1.723.05c-.479.05-.923.163-1.321.445l.866 1.224c.106-.075.265-.14.615-.178c.365-.04.844-.04 1.563-.04zm-2.75 4.456c0-.758 0-1.274.039-1.668c.037-.384.103-.57.182-.696l-1.268-.8c-.258.407-.36.86-.407 1.353c-.047.482-.046 1.082-.046 1.811zm-.294-3.961c-.3.212-.556.484-.753.796l1.268.8a1.3 1.3 0 0 1 .351-.372z"
-            />
-          </g>
-        </svg>
-      ),
-      title: "Ổ cứng",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="1em"
-          height="1em"
-          viewBox="0 0 48 48"
-        >
-          <path
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="3"
-            d="M8.16 17.365c-2.504.137-4.516 1.93-4.762 4.425C3.186 23.94 3 26.973 3 31s.186 7.061.398 9.21c.246 2.495 2.258 4.288 4.763 4.425C11.382 44.812 16.562 45 24 45s12.618-.188 15.84-.365c2.504-.137 4.516-1.93 4.762-4.425c.212-2.149.398-5.183.398-9.21s-.186-7.061-.398-9.21c-.246-2.495-2.258-4.288-4.763-4.425C36.618 17.188 31.438 17 24 17s-12.618.188-15.84.365M18 39h12M11 24.5h2m-2 7h2m6-7h2m-2 7h2m6-7h2m-2 7h2m6-7h2m-2 7h2M24 16v-2.568a4 4 0 0 1 3.392-3.954l6.216-.956A4 4 0 0 0 37 4.568V3"
-          />
-        </svg>
-      ),
-      title: "Phụ kiện",
-    },
-  ];
+
+  const fetchCategories = async () => {
+    const res = await categoryService.getAllCategories();
+    return res;
+  };
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+  });
+
+  console.log("Categories in header:", categories);
+
+  const menuList = categories
+    ? categories?.data?.map((category: any) => ({
+        icon: <span className="text-xl">{category.icon_emoji}</span>,
+        title: category.name,
+        submenu:
+          category.children?.map((child: any) => ({
+            name: child.name,
+            link: `/listproduct/${child.slug}`,
+          })) || [],
+        parentLink: `/listproduct/${category.slug}`,
+      }))
+    : [];
+
+  // const menuList = [
+  //   {
+  //     icon: (
+  //       <svg
+  //         xmlns="http://www.w3.org/2000/svg"
+  //         width="1em"
+  //         height="1em"
+  //         viewBox="0 0 24 24"
+  //       >
+  //         <path
+  //           fill="currentColor"
+  //           d="M4 6h16v10H4m16 2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H4c-1.11 0-2 .89-2 2v10a2 2 0 0 0 2 2H0v2h24v-2z"
+  //         />
+  //       </svg>
+  //     ),
+  //     title: "Laptop",
+  //     submenu: [
+  //       { name: "Laptop Gaming", link: "/products?category=laptop-gaming" },
+  //       { name: "Laptop Văn phòng", link: "/products?category=laptop-office" },
+  //       { name: "Laptop Ultrabook", link: "/products?category=laptop-ultra" },
+  //     ],
+  //   },
+  //   {
+  //     icon: (
+  //       <svg
+  //         xmlns="http://www.w3.org/2000/svg"
+  //         width="1em"
+  //         height="1em"
+  //         viewBox="0 0 24 24"
+  //       >
+  //         <path
+  //           fill="none"
+  //           stroke="currentColor"
+  //           strokeLinecap="round"
+  //           strokeLinejoin="round"
+  //           strokeWidth="1.5"
+  //           d="M9 20h3m3 0h-3m0 0v-3m0 0h7a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h7v3z"
+  //         />
+  //       </svg>
+  //     ),
+  //     title: "PC Desktop",
+  //     submenu: [
+  //       { name: "PC Gaming", link: "/products?category=pc-gaming" },
+  //       { name: "PC Văn phòng", link: "/products?category=pc-office" },
+  //       { name: "PC Workstation", link: "/products?category=pc-work" },
+  //     ],
+  //   },
+  //   {
+  //     icon: (
+  //       <svg
+  //         xmlns="http://www.w3.org/2000/svg"
+  //         width="1em"
+  //         height="1em"
+  //         viewBox="0 0 24 24"
+  //       >
+  //         <g fill="none" fillRule="evenodd">
+  //           <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+  //           <path
+  //             fill="currentColor"
+  //             d="M15 2a1 1 0 0 1 1 1v1h1a3 3 0 0 1 3 3v1h1a1 1 0 1 1 0 2h-1v4h1a1 1 0 1 1 0 2h-1v1a3 3 0 0 1-3 3h-1v1a1 1 0 1 1-2 0v-1h-4v1a1 1 0 1 1-2 0v-1H7a3 3 0 0 1-3-3v-1H3a1 1 0 1 1 0-2h1v-4H3a1 1 0 0 1 0-2h1V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 2 0v1h4V3a1 1 0 0 1 1-1m2 4H7a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1m-3 2a2 2 0 0 1 1.995 1.85L16 10v4a2 2 0 0 1-1.85 1.995L14 16h-4a2 2 0 0 1-1.995-1.85L8 14v-4a2 2 0 0 1 1.85-1.995L10 8zm0 2h-4v4h4z"
+  //           />
+  //         </g>
+  //       </svg>
+  //     ),
+  //     title: "Phụ kiện",
+  //     submenu: [
+  //       { name: "Chuột", link: "/products?category=mouse" },
+  //       { name: "Bàn phím", link: "/products?category=keyboard" },
+  //       { name: "Tai nghe", link: "/products?category=headphone" },
+  //     ],
+  //   },
+  //   {
+  //     icon: (
+  //       <svg
+  //         xmlns="http://www.w3.org/2000/svg"
+  //         width="1em"
+  //         height="1em"
+  //         viewBox="0 0 24 24"
+  //       >
+  //         <g fill="none">
+  //           <path
+  //             stroke="currentColor"
+  //             strokeLinecap="round"
+  //             strokeWidth="1.5"
+  //             d="M19 17v1m-2.5-1v1M14 17v1m-2.5-1v1"
+  //             opacity=".4"
+  //           />
+  //           <path
+  //             fill="currentColor"
+  //             d="m19 5.118l.72-.21l-.002-.007l-.003-.009zm-14 0l-.715-.226l-.003.009l-.002.008zM2.889 20.643l.433-.612zm-.552-.584l.634-.4zm19.326 0l-.634-.4zm-.552.584l-.433-.612zm0-6.698l-.433.612zm.552.584l-.634.4zm-18.774-.584l.433.612zm-.552.584l.634.4zM7.5 3.75h9v-1.5h-9zm9 0c.428 0 .753.1 1.016.305c.269.21.549.59.769 1.288l1.43-.45c-.28-.89-.698-1.57-1.277-2.021c-.587-.457-1.261-.622-1.938-.622zm-9-1.5c-.676 0-1.351.165-1.938.622c-.58.451-.997 1.13-1.277 2.02l1.43.45c.22-.697.5-1.077.77-1.287c.262-.205.587-.305 1.015-.305zm10.78 3.076l2.851 9.839l1.44-.418l-2.85-9.838zm-14-.417l-2.852 9.838l1.44.418L5.72 5.326zm1.22 9.43h13v-1.5h-13zm13 5.911h-13v1.5h13zm-13 0c-.719 0-1.198-.001-1.563-.04c-.35-.038-.509-.104-.615-.18l-.866 1.225c.398.282.842.395 1.32.446c.464.05 1.038.049 1.724.049zm-4.25-2.956c0 .729 0 1.329.046 1.812c.047.493.15.945.407 1.353l1.268-.8c-.08-.126-.145-.313-.182-.697c-.038-.394-.039-.91-.039-1.668zm2.072 2.737a1.3 1.3 0 0 1-.35-.372l-1.27.8c.198.313.453.584.754.796zm17.928-2.737c0 .758 0 1.274-.039 1.668c-.037.384-.103.57-.182.697l1.268.8c.258-.408.36-.86.407-1.353c.047-.483.046-1.083.046-1.812zM18.5 21.75c.686 0 1.26.001 1.723-.049c.479-.052.923-.164 1.321-.446l-.866-1.224c-.106.075-.265.141-.615.179c-.365.039-.844.04-1.563.04zm2.529-2.091a1.3 1.3 0 0 1-.351.372l.866 1.224c.3-.212.556-.483.753-.796zm-2.529-5.32c.719 0 1.198 0 1.563.04c.35.037.509.103.615.178l.866-1.224c-.398-.282-.842-.394-1.32-.446c-.464-.05-1.038-.049-1.724-.049zm4.25 2.955c0-.729 0-1.329-.046-1.811c-.047-.494-.15-.946-.407-1.354l-1.268.8c.08.127.145.313.182.697c.038.394.039.91.039 1.668zm-2.072-2.737c.136.097.256.223.35.373l1.27-.8a2.8 2.8 0 0 0-.754-.797zM5.5 12.838c-.686 0-1.26 0-1.723.05c-.479.05-.923.163-1.321.445l.866 1.224c.106-.075.265-.14.615-.178c.365-.04.844-.04 1.563-.04zm-2.75 4.456c0-.758 0-1.274.039-1.668c.037-.384.103-.57.182-.696l-1.268-.8c-.258.407-.36.86-.407 1.353c-.047.482-.046 1.082-.046 1.811zm-.294-3.961c-.3.212-.556.484-.753.796l1.268.8a1.3 1.3 0 0 1 .351-.372z"
+  //           />
+  //         </g>
+  //       </svg>
+  //     ),
+  //     title: "Ổ cứng",
+  //     submenu: [
+  //       { name: "SSD", link: "/products?category=ssd" },
+  //       { name: "HDD", link: "/products?category=hdd" },
+  //     ],
+  //   },
+  // ];
   return (
     <>
       <div className="bg-[#E7000B] py-[8px]">
@@ -305,14 +336,56 @@ const Header = () => {
         </div>
         <div className="max-w-7xl mx-auto px-[16px]">
           <div className="py-[8px] flex justify-between">
-            <ul className="flex gap-2 text-sm font-medium">
-              {menuList.map((item, index) => (
+            <ul className="flex gap-2 text-sm font-medium relative">
+              {menuList.map((item: any, index: any) => (
                 <li
                   key={index}
-                  className="flex text-[15px] text-[#5E5C6E] font-semibold items-center gap-2 hover:bg-[#F3F4F6] p-2 rounded-md"
+                  className="relative group"
+                  onMouseEnter={() => setHoveredMenu(index)}
+                  onMouseLeave={() => setHoveredMenu(null)}
                 >
-                  {item.icon}
-                  {item.title}
+                  <Link href={item.parentLink}>
+                    <button className="flex text-[15px] text-[#5E5C6E] font-semibold items-center gap-2 hover:bg-[#F3F4F6] p-2 rounded-md transition-colors">
+                      {item.icon}
+                      {item.title}
+                      {item.submenu && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          className={`transition-transform ${
+                            hoveredMenu === index ? "rotate-180" : ""
+                          }`}
+                        >
+                          <path fill="currentColor" d="M7 10l5 5 5-5z" />
+                        </svg>
+                      )}
+                    </button>
+                  </Link>
+
+                  {item.submenu && (
+                    <div
+                      className={`absolute left-0 mt-0 w-48 bg-white rounded-md shadow-lg border border-gray-200 transition-all duration-200 ${
+                        hoveredMenu === index
+                          ? "opacity-100 visible translate-y-0"
+                          : "opacity-0 invisible -translate-y-2"
+                      }`}
+                    >
+                      <ul className="py-2">
+                        {item.submenu.map((subitem: any, subindex: any) => (
+                          <li key={subindex}>
+                            <Link
+                              href={subitem.link}
+                              className="px-4 py-2 text-sm text-[#5E5C6E] hover:bg-[#F3F4F6] hover:text-[#E7000B] block transition-colors"
+                            >
+                              {subitem.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>

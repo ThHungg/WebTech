@@ -5,14 +5,23 @@ import PersonalOrder from "./PersonalOrder";
 import PersonalFavor from "./PersonalFavor";
 import PersonalSetting from "./PersonalSetting";
 import PersonalAddress from "./PersonalAddress";
+import * as authServices from "../../../services/authServices";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+const PersonalDetailsSection = ({ userProfile }: { userProfile: any }) => {
+  const [activeTab, setActiveTab] = useState("personalInfo");
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      const res = await authServices.logout();
+      toast.success(res?.message || "Đăng xuất thành công!");
+      router.push("/");
+      localStorage.removeItem("access_token");
+    } catch (error) {
+      toast.error("Đăng xuất thất bại!");
+    }
+  };
 
-const PersonalDetailsSection = ({
-  userProfile,
-}: {
-  userProfile: any;
-}) => {
-    const [activeTab, setActiveTab] = useState("personalInfo");
-    
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-4 gap-6">
@@ -209,13 +218,17 @@ const PersonalDetailsSection = ({
                 d="m17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5M4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4z"
               />
             </svg>
-            <span className="font-medium text-white">Đăng xuất</span>
+            <span className="font-medium text-white" onClick={handleLogout}>
+              Đăng xuất
+            </span>
           </button>
         </div>
         {activeTab === "personalInfo" && (
           <PersonalInfor userProfile={userProfile} />
         )}
-        {activeTab === "addressInfo" && <PersonalAddress userProfile={userProfile}/>}
+        {activeTab === "addressInfo" && (
+          <PersonalAddress userProfile={userProfile} />
+        )}
         {activeTab === "order" && <PersonalOrder />}
         {activeTab === "favorites" && <PersonalFavor />}
         {activeTab === "settings" && <PersonalSetting />}

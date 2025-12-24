@@ -7,19 +7,19 @@ import WarrantySection from "@/components/Common/WarrantySection";
 import formatVND from "@/utils/formatVND";
 import { memo, useState } from "react";
 import SpecialOffer from "../SpecialOffer";
+import { formatPercentage } from "@/utils/formatPercentage";
 
-const InforProduct = () => {
-  const [selectVersion, setSelectVersion] = useState(0);
+const InforProduct = ({
+  productDetail,
+  selectVersion,
+  setSelectVersion,
+}: {
+  productDetail: any;
+  selectVersion: number;
+  setSelectVersion: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   const [quantity, setQuantity] = useState(1);
 
-  const specifications = [
-    "Intel Core i9-13980HX (24 nhân, 32 luồng)",
-    "NVIDIA RTX 4070 8GB GDDR6",
-    "32GB DDR5 4800MHz",
-    "1TB SSD NVMe Gen4",
-    '16" QHD 240Hz IPS',
-    "Windows 11 Home",
-  ];
   return (
     <div className="p-[24px] rounded-xl shadow-lg w-full bg-white border-[1px] border-gray-200">
       {/* Thong tin san pham */}
@@ -28,7 +28,10 @@ const InforProduct = () => {
           <p className="flex items-center gap-2 text-gray-600 text-[14px]">
             {" "}
             Thương hiệu:
-            <span className="!text-red-500 font-semibold"> Asus</span>
+            <span className="!text-red-500 font-semibold">
+              {" "}
+              {productDetail?.brand?.name}
+            </span>
             <span>|</span>
             SKU: ASUS-ROG-G16-001
           </p>
@@ -52,11 +55,17 @@ const InforProduct = () => {
           </div>
         </div>
         <h2 className="mb-[12px] font-bold">
-          Laptop Gaming ASUS ROG Strix G16 i9-13980HX
+          {productDetail?.name}{" "}
+          {selectVersion !== 0 && (
+            <span className="font-semibold text-2xl">
+              ({productDetail?.variants[selectVersion]?.name})
+            </span>
+          )}
         </h2>
         <div className="flex gap-3">
           <div className="flex items-center gap-3 font-semibold">
-            <StarRating rating={4} /> 4.0
+            <StarRating rating={productDetail?.avg_rating} />{" "}
+            {productDetail?.avg_rating}
           </div>
           <span className="text-gray-300">|</span>
           <p className="text-gray-600">127 đánh giá</p>
@@ -76,22 +85,27 @@ const InforProduct = () => {
                 d="M20 8v2h6.586L18 18.586l-4.293-4.293a1 1 0 0 0-1.414 0L2 24.586L3.414 26L13 16.414l4.293 4.293a1 1 0 0 0 1.414 0L28 11.414V18h2V8Z"
               />
             </svg>
-            256 đã bán
+            {productDetail?.total_sold} đã bán
           </p>
         </div>
       </div>
       {/* Giá sản phẩm */}
       <div className="bg-red-50 p-[20px] rounded-xl border-[1px] border-red-300 mb-[24px]">
-        <p className="text-[28px] font-black text-red-500 inline-flex items-baseline gap-2 mb-[8px]">
-          {formatVND(46000000)}
-          <span className="text-[18px] text-gray-500 line-through">
-            {formatVND(52000000)}
-          </span>
-
-          <span className="flex items-center justify-center self-center ml-2 px-2 py-2 rounded-2xl bg-red-500 text-white text-[13px] font-bold leading-none">
-            -80%
-          </span>
-        </p>
+        {productDetail?.variants[selectVersion]?.price ===
+        productDetail?.variants[selectVersion]?.original_price ? (
+          <p className="text-[28px] font-black text-red-500 inline-flex items-baseline gap-2 mb-[8px]">
+            {formatVND(productDetail?.variants[selectVersion]?.price)}
+          </p>
+        ) : (
+          <p className="text-[28px] font-black text-red-500 inline-flex items-baseline gap-2 mb-[8px]">
+            {formatVND(productDetail?.variants[selectVersion]?.price)}
+            <span className="text-[18px] text-gray-500 line-through">
+              {formatVND(
+                productDetail?.variants[selectVersion]?.original_price
+              )}
+            </span>
+          </p>
+        )}
         <div className="flex items-center gap-2 text-gray-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +124,11 @@ const InforProduct = () => {
             />
           </svg>
           <p className="">
-            Còn <span className="!text-green-500 font-bold">15</span> sản phẩm
+            Còn{" "}
+            <span className="!text-green-500 font-bold">
+              {productDetail?.total_stock}
+            </span>{" "}
+            sản phẩm
           </p>
         </div>
       </div>
@@ -137,7 +155,61 @@ const InforProduct = () => {
           Chọn phiên bản sản phẩm
         </h5>
         <div className="space-y-2">
-          <button
+          {productDetail?.variants?.map((variant: any, index: number) => (
+            <button
+              key={index}
+              onClick={() => setSelectVersion(index)}
+              className={`p-[16px] border-[2px] border-gray-300 rounded-lg w-full ${
+                selectVersion === index ? "border-red-300 bg-red-50" : ""
+              }`}
+            >
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col items-start">
+                  {index === 0 ? (
+                    <p className="text-[18px] font-semibold">
+                      Cấu hình tiêu chuẩn
+                    </p>
+                  ) : (
+                    <p className="text-[18px] font-semibold">
+                      Cấu hình {index + 1}: {variant.name}
+                    </p>
+                  )}
+                  {variant.original_price !== variant.price ? (
+                    <p className="text-[16px] font-bold text-red-500">
+                      {formatVND(variant.price)}
+                      <span className="text-[14px] ml-2 text-gray-500 line-through">
+                        {" "}
+                        {formatVND(variant.original_price)}{" "}
+                      </span>
+                    </p>
+                  ) : (
+                    <p className="text-[16px] font-bold text-red-500">
+                      {formatVND(variant.price)}
+                    </p>
+                  )}
+                </div>
+                {selectVersion === index && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    className="text-red-500"
+                  >
+                    <polyline
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.5"
+                      points="2.75 8.75 6.25 12.25 13.25 4.75"
+                    />
+                  </svg>
+                )}
+              </div>
+            </button>
+          ))}
+          {/* <button
             onClick={() => setSelectVersion(0)}
             className={`p-[16px] border-[2px] border-gray-300 rounded-lg w-full ${
               selectVersion === 0 ? "border-red-300 bg-red-50" : ""
@@ -235,7 +307,7 @@ const InforProduct = () => {
                 </svg>
               )}
             </div>
-          </button>
+          </button> */}
         </div>
       </div>
       {/* Thông tin nổi bật */}
@@ -255,30 +327,32 @@ const InforProduct = () => {
           Thông số sản phẩm
         </h5>
         <div className="flex flex-col w-full gap-3">
-          {specifications.map((spec, index) => (
-            <div
-              key={index}
-              className="p-[8px] bg-gray-50 flex items-center rounded-xl"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 16 16"
-                className="text-green-500"
+          {productDetail?.attributeValues
+            ?.slice(0, 6)
+            .map((att: any, index: number) => (
+              <div
+                key={index}
+                className="p-[8px] bg-gray-50 flex items-center rounded-xl"
               >
-                <polyline
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  points="2.75 8.75 6.25 12.25 13.25 4.75"
-                />
-              </svg>
-              <p className="ml-2 text-gray-700">{spec}</p>
-            </div>
-          ))}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 16 16"
+                  className="text-green-500"
+                >
+                  <polyline
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    points="2.75 8.75 6.25 12.25 13.25 4.75"
+                  />
+                </svg>
+                <p className="ml-2 text-gray-700">{att.value}</p>
+              </div>
+            ))}
         </div>
       </div>
       {/* Số lượng */}

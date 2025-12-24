@@ -11,9 +11,9 @@ const CheckoutPage = async ({ params }: { params: { slug?: string[] } }) => {
       </div>
       <div className="container py-[32px] grid grid-cols-3 gap-3">
         <div className="col-span-2">
-        <CheckoutConfirm />
+          <CheckoutConfirm />
         </div>
-        <CheckoutInfo />
+        {/* <CheckoutInfo /> */}
       </div>
     </div>
   );

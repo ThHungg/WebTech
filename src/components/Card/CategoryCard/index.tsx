@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { memo } from "react";
 
-const CategoryCard = () => {
+const CategoryCard = ({ categoryData }: { categoryData: any }) => {  
   return (
     <div className="group m-4">
       <div className="bg-white rounded-3xl shadow-md transition-transform duration-200 group-hover:scale-105 group-hover:shadow-lg overflow-hidden mb-8 mt-5">
@@ -14,13 +14,13 @@ const CategoryCard = () => {
         </div>
         <div className="p-6">
           <h4 className="mb-[8px] font-bold group-hover:text-[#E7000B]">
-            Laptop
+            {categoryData?.name} <span>{categoryData?.icon_emoji}</span>
           </h4>
           <p className="mb-[16px] group-hover:text-gray-500">
             Gaming, văn phòng, đồ họa
           </p>
           <div className="flex items-center text-red-600 group-hover:text-[#E7000B]">
-            <Link href="/listproduct/hung">
+            <Link href={`/listproduct/${categoryData?.slug}`}>
               <span className="font-medium">Khám phá ngay</span>
             </Link>
             <svg

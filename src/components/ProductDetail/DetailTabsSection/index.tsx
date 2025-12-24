@@ -4,8 +4,9 @@ import ProductDescription from "./ProductDescription";
 import ProductSpecs from "./ProductSpecs";
 import ProductReviews from "./ProductReviews";
 
-const DetailTabsSection = () => {
+const DetailTabsSection = ({ productDetail }: { productDetail: any }) => {
   const [activeTab, setActiveTab] = useState("description");
+
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       <div className="border-b border-gray-200 bg-gray-50">
@@ -80,8 +81,15 @@ const DetailTabsSection = () => {
           </button>
         </div>
       </div>
-      {activeTab === "description" && <ProductDescription />}
-      {activeTab === "specifications" && <ProductSpecs />}
+      {activeTab === "description" && (
+        <ProductDescription description={productDetail?.description} />
+      )}
+      {activeTab === "specifications" && (
+        <ProductSpecs
+          attributes={productDetail?.attributes}
+          attributeValues={productDetail?.attributeValues}
+        />
+      )}
       {activeTab === "reviews" && <ProductReviews />}
     </div>
   );
