@@ -18,7 +18,7 @@ const FeaturedSection = () => {
             </p>
           </div>
           <Link
-            href="/"
+            href="/listproduct"
             className="group flex items-center gap-1 text-[16px] font-semibold text-red-500 hover:text-red-600 "
           >
             Xem tất cả{" "}

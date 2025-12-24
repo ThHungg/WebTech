@@ -306,8 +306,9 @@ const Header = () => {
                     </svg>
                   </Link>
                 )}
-                <button
-                  onClick={() => setIsOpenCartSidebar(true)}
+                <Link
+                  href="/cart"
+                  // onClick={() => setIsOpenCartSidebar(true)}
                   className="p-2"
                 >
                   <svg
@@ -328,7 +329,7 @@ const Header = () => {
                       <circle cx="12" cy="27" r="2" />
                     </g>
                   </svg>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
