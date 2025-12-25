@@ -65,12 +65,13 @@ const FeaturedSection = () => {
               0: { slidesPerView: 1 },
             }}
           >
-            {dataProducts.map((product: any) =>(
+            {dataProducts.map((product: any) => (
               <SwiperSlide key={product?.id}>
-                <FeaturedCard  dataProduct={product}/>
+                <Link href={`/products/${product?.id}`}>
+                  <FeaturedCard dataProduct={product} />
+                </Link>
               </SwiperSlide>
             ))}
-            
           </Swiper>
         </div>
       </div>

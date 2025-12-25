@@ -1,6 +1,17 @@
 import { memo } from "react";
+import * as orderServices from "../../../services/orderServices";
+import { useQuery } from "@tanstack/react-query";
 
 const StatisticsSection = () => {
+  const fetchUserOrders = async () => {
+    const res = await orderServices.getOrdersByUser(1, 10);
+    return res;
+  };
+
+  const { data: userOrders = [] } = useQuery({
+    queryKey: ["userOrders"],
+    queryFn: fetchUserOrders,
+  });
   return (
     <div className="border-b border-gray-200">
       <div className="max-w-7xl px-[16px] py-[24px] mx-auto">
@@ -27,7 +38,7 @@ const StatisticsSection = () => {
               </svg>
             </div>
             <div>
-              <p className="font-bold text-2xl text-gray-800">24</p>
+              <p className="font-bold text-2xl text-gray-800">{userOrders?.data?.length}</p>
               <p className="text-sm text-gray-500">Đơn hàng</p>
             </div>
           </div>

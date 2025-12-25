@@ -80,7 +80,7 @@ const InforProduct = ({
             {productDetail?.avg_rating}
           </div>
           <span className="text-gray-300">|</span>
-          <p className="text-gray-600">127 đánh giá</p>
+          <p className="text-gray-600">{productDetail?.reviews?.length} đánh giá</p>
           <span className="text-gray-300">|</span>
           <p className="text-gray-600 flex items-center gap-2">
             <svg

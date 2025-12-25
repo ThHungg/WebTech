@@ -77,7 +77,6 @@ const ProductCard = ({
           {/* Đánh giá */}
           <div className="flex items-center mb-[12px]">
             <StarRating rating={productData.avg_rating} />
-            <span className="ml-2 text-[12px] text-gray-500">(127)</span>
           </div>
           <div className="mb-4 flex gap-2">
             <div className="px-[8px] py-[4px] bg-gray-100 rounded-md flex items-center justify-center max-w-[120px]">

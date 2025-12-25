@@ -8,6 +8,9 @@ import { toast } from "react-toastify";
 
 const FeaturedCard = ({dataProduct}: {dataProduct: any}) => {
   console.log("data", dataProduct);
+  if (!dataProduct) {
+    return null;
+  }
   const addToCart = async (e : any) => {
       e.preventDefault();
       console.log("add to cart");
@@ -24,7 +27,7 @@ const FeaturedCard = ({dataProduct}: {dataProduct: any}) => {
       <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-103 hover:-translate-y-1">
         <div className="aspect-square overflow-hidden relative">
           <img
-            src={getFullImg(dataProduct.images[0]?.image)}
+            src={getFullImg(dataProduct?.images?.[0]?.image)}
             alt=""
             className="w-full h-full object-cover hover:scale-110 transform transition-transform duration-300"
           />

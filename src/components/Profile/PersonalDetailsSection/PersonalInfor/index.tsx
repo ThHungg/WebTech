@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import * as authServices from "../../../../services/authServices";
 import { toast } from "react-toastify";
 import { formatAddress } from "@/utils/formatAddress";
+import * as orderServices from "../../../../services/orderServices";
+import { useQuery } from "@tanstack/react-query";
+import { formatMillionVND } from "@/utils/formatMillionVND";
+import { formatDate } from "@/utils/formatDate";
 
 const PersonalInfor = ({ userProfile }: { userProfile: any }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -42,6 +46,23 @@ const PersonalInfor = ({ userProfile }: { userProfile: any }) => {
     }
   };
 
+  const fetchUserOrders = async () => {
+    const res = await orderServices.getOrdersByUser(1, 10);
+    return res;
+  };
+
+  const { data: userOrders = [] } = useQuery({
+    queryKey: ["userOrders"],
+    queryFn: fetchUserOrders,
+  });
+  console.log("userOrders", userProfile);
+  
+  const totalAmount =
+    userOrders?.data?.reduce(
+      (sum: number, order: any) => sum + Number(order.final_amount || 0),
+      0
+    ) ?? 0;
+  
   return (
     <div className="col-span-3 bg-white rounded-lg shadow-sm p-6">
       <div className="flex justify-between items-center mb-4">
@@ -186,19 +207,36 @@ const PersonalInfor = ({ userProfile }: { userProfile: any }) => {
       <div className="bg-orange-50 rounded-xl p-6 mt-8">
         <h5 className="font-bold  text-gray-900 mb-6">Thông tin thành viên</h5>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 ">
             <span className="text-gray-500 text-sm">Hạng thành viên</span>
-            <span className="font-bold text-red-600 text-lg">VIP Gold</span>
+            <span
+              className={`font-bold text-lg ${
+                totalAmount >= 50_000_000
+                  ? "text-red-600"
+                  : totalAmount >= 10_000_000
+                  ? "text-yellow-500"
+                  : "text-gray-600"
+              }`}
+            >
+              {totalAmount >= 50_000_000
+                ? "SVIP"
+                : totalAmount >= 10_000_000
+                ? "VIP"
+                : "Standard"}
+            </span>
           </div>
+
           <div className="flex flex-col gap-1">
             <span className="text-gray-500 text-sm">Tổng chi tiêu</span>
             <span className="font-bold text-gray-900 text-lg">
-              125.000.000 ₫
+              {formatMillionVND(totalAmount)}
             </span>
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-gray-500 text-sm">Ngày tham gia</span>
-            <span className="font-bold text-gray-900 text-lg">01/2022</span>
+            <span className="font-bold text-gray-900 text-lg">
+              {formatDate(userProfile?.data?.updatedAt)}
+            </span>
           </div>
         </div>
       </div>
