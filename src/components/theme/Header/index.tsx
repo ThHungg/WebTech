@@ -33,7 +33,6 @@ const Header = () => {
     queryFn: fetchCategories,
   });
 
-  console.log("Categories in header:", categories);
 
   const menuList = categories
     ? categories?.data?.map((category: any) => ({

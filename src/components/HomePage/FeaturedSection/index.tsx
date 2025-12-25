@@ -5,8 +5,24 @@ import "swiper/css";
 import "swiper/css/pagination";
 import FeaturedCard from "../../Card/FeaturedCard";
 import Link from "next/link";
+import * as productServices from "../../../services/productServices";
+import { useQuery } from "@tanstack/react-query";
 
 const FeaturedSection = () => {
+  const fetchAllProducts = async () => {
+    try {
+      const res = await productServices.getAllProducts();
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const {data: dataProducts =[]} = useQuery({
+    queryKey: ["dataProducts"],
+    queryFn: fetchAllProducts,
+  });
+  console.log("featuredProducts: ", dataProducts);
+      
   return (
     <div className="py-[64px]">
       <div className="container px-4">
@@ -49,33 +65,12 @@ const FeaturedSection = () => {
               0: { slidesPerView: 1 },
             }}
           >
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
+            {dataProducts.map((product: any) =>(
+              <SwiperSlide key={product?.id}>
+                <FeaturedCard  dataProduct={product}/>
+              </SwiperSlide>
+            ))}
+            
           </Swiper>
         </div>
       </div>

@@ -3,10 +3,25 @@ import { formatPercentage } from "@/utils/formatPercentage";
 import formatVND from "@/utils/formatVND";
 import getFullImg from "@/utils/getFullImg";
 import { memo } from "react";
+import * as  cartServices from "../../../services/cartServices";
+import { toast } from "react-toastify";
 
 const ProductCard = ({
   productData,
 }: { productData: any }) => {
+  console.log("product card" , productData);
+  const addToCart = async (e : any) => {
+    e.preventDefault();
+    console.log("add to cart");
+    try {
+      const res = await cartServices.addItemsToCart(productData?.variants[0]?.id, 1);
+      toast.success("Thêm vào giỏ hàng thành công");
+    } catch (error) {
+      console.log(error);
+      toast.error("Thêm vào giỏ hàng thất bại");
+    }
+  }
+  
   return (
     <div className="group my-3 mx-2 cursor-pointer">
       <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-103 hover:-translate-y-1">
@@ -84,7 +99,7 @@ const ProductCard = ({
               {formatVND(productData?.variants[0]?.price)}
             </p>
           </div>
-          <button className="py-[12px] flex items-center justify-center gap-2 text-center w-full bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-lg font-semibold transition-all duration-200 hover:from-red-700 hover:to-orange-600 hover:shadow-md active:scale-95">
+          <button onClick={addToCart} className="py-[12px] flex items-center justify-center gap-2 text-center w-full bg-linear-to-r from-red-600 to-orange-500 text-white rounded-lg font-semibold transition-all duration-200 hover:from-red-700 hover:to-orange-600 hover:shadow-md active:scale-95">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"

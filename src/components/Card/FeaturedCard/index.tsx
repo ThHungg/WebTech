@@ -1,13 +1,30 @@
+import StarRating from "@/components/Common/StarRating";
+import { formatPercentage } from "@/utils/formatPercentage";
+import formatVND from "@/utils/formatVND";
+import getFullImg from "@/utils/getFullImg";
 import { memo } from "react";
+import * as  cartServices from "../../../services/cartServices";
+import { toast } from "react-toastify";
 
-const FeaturedCard = () => {
+const FeaturedCard = ({dataProduct}: {dataProduct: any}) => {
+  console.log("data", dataProduct);
+  const addToCart = async (e : any) => {
+      e.preventDefault();
+      console.log("add to cart");
+      try {
+        const res = await cartServices.addItemsToCart(dataProduct?.variants[0]?.id, 1);
+        toast.success("Thêm vào giỏ hàng thành công");
+      } catch (error) {
+        console.log(error);
+        toast.error("Thêm vào giỏ hàng thất bại");
+      }
+    }
   return (
-    <div className="group my-6 mx-4 cursor-pointer">
-      {" "}
+    <div className="group my-3 mx-2 cursor-pointer">
       <div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-103 hover:-translate-y-1">
         <div className="aspect-square overflow-hidden relative">
           <img
-            src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500"
+            src={getFullImg(dataProduct.images[0]?.image)}
             alt=""
             className="w-full h-full object-cover hover:scale-110 transform transition-transform duration-300"
           />
@@ -36,99 +53,53 @@ const FeaturedCard = () => {
               />
             </path>
           </svg>
+          <div className="absolute top-2 left-2 px-3 py-1 rounded-md bg-red-500">
+            <span className="font-bold text-white text-[13px]">
+              {Number(dataProduct?.variants[0]?.discount_percent) > 0
+                ? `-${formatPercentage(
+                    Number(dataProduct.variants[0].discount_percent)
+                  )}`
+                : Number(dataProduct?.variants[0]?.discount_amount) > 0
+                ? `-${formatVND(
+                    Number(dataProduct.variants[0].discount_amount)
+                  )}`
+                : ""}
+            </span>
+          </div>
         </div>
         <div className="p-5">
-          <h6 className="mb-[8px] font-bold group-hover:text-[#E7000B] mb-[12px]">
-            Laptop Gaming ASUS ROG Strix G16
+          <h6 className="mb-[8px] font-bold group-hover:text-[#E7000B] mb-[12px]  truncate">
+            {dataProduct.name}
           </h6>
           {/* Đánh giá */}
           <div className="flex items-center mb-[12px]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-star w-4 h-4 fill-yellow-400 text-yellow-400"
-              aria-hidden="true"
-            >
-              <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-star w-4 h-4 fill-yellow-400 text-yellow-400"
-              aria-hidden="true"
-            >
-              <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-star w-4 h-4 fill-yellow-400 text-yellow-400"
-              aria-hidden="true"
-            >
-              <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-star w-4 h-4 fill-yellow-400 text-yellow-400"
-              aria-hidden="true"
-            >
-              <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-star w-4 h-4 text-gray-300"
-              aria-hidden="true"
-            >
-              <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
-            </svg>
+            <StarRating rating={dataProduct.avg_rating} />
             <span className="ml-2 text-[12px] text-gray-500">(127)</span>
+          </div>
+          <div className="mb-4 flex gap-2">
+            <div className="px-[8px] py-[4px] bg-gray-100 rounded-md flex items-center justify-center max-w-[120px]">
+              <span className="text-[12px] whitespace-nowrap overflow-hidden text-ellipsis w-[80px] ">
+                {dataProduct?.attributeValues[0]?.value}
+              </span>
+            </div>
+            <div className="px-[8px] py-[4px] bg-gray-100 rounded-md flex items-center justify-center w-fit">
+              <span className="text-[12px] whitespace-nowrap overflow-hidden text-ellipsis w-[80px]">
+                {dataProduct?.attributeValues[1]?.value}
+              </span>
+            </div>
           </div>
           <div className="mb-4">
             <p className="text-[14px] text-gray-400 line-through">
-              52.990.000&nbsp;₫
+              {formatVND(dataProduct?.variants[0]?.original_price)}
             </p>
             <p className="text-[24px] font-bold text-red-600">
-              45.990.000&nbsp;₫
+              {formatVND(dataProduct?.variants[0]?.price)}
             </p>
           </div>
-          <button className="py-[12px] flex items-center justify-center gap-2 text-center w-full bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-lg font-semibold transition-all duration-200 hover:from-red-700 hover:to-orange-600 hover:shadow-md active:scale-95">
+          <button
+            onClick={addToCart}
+            className="py-[12px] flex items-center justify-center gap-2 text-center w-full bg-linear-to-r from-red-600 to-orange-500 text-white rounded-lg font-semibold transition-all duration-200 hover:from-red-700 hover:to-orange-600 hover:shadow-md active:scale-95"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"

@@ -1,8 +1,8 @@
 import { memo } from "react";
 
-const AddToCart = () => {
+const AddToCart = ({ onChange }: { onChange?: () => void }) => {
   return (
-    <button className="py-[12px] flex items-center justify-center gap-2 text-center w-full bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-lg font-semibold transition-all duration-200 hover:from-red-700 hover:to-orange-600 hover:shadow-md active:scale-95">
+    <button onClick={onChange} className="py-[12px] flex items-center justify-center gap-2 text-center w-full bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-lg font-semibold transition-all duration-200 hover:from-red-700 hover:to-orange-600 hover:shadow-md active:scale-95">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1em"
