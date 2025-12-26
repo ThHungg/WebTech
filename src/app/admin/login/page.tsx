@@ -9,7 +9,7 @@ const AdminLoginPage = () => {
         <div className="p-[32px] border-[1px] bg-white border-gray-100 shadow-lg rounded-[16px]">
           <div className="">
             <img
-              src="https://h5m4.c19.e2-1.dev/image-video/logo/logocertapple.png"
+              src="https://png.pngtree.com/png-clipart/20250309/original/pngtree-logos-are-prohibited-red-logo-ban-vector-png-image_20615554.png"
               alt=""
               className="w-[64px] h-[64px] object-cover mx-auto mb-[12px]"
             />

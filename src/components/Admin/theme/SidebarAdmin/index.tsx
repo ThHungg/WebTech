@@ -182,7 +182,7 @@ const SidebarAdmin = () => {
     <div className="flex inline-flex flex-col border-r border-gray-200 min-h-screen relative">
       <div className="p-[24px] border-b border-gray-200 flex gap-2">
         <img
-          src="https://h5m4.c19.e2-1.dev/image-video/logo/logocertapple.png"
+          src="https://png.pngtree.com/png-clipart/20250309/original/pngtree-logos-are-prohibited-red-logo-ban-vector-png-image_20615554.png"
           alt=""
           className="w-[42] h-[42px] object-cover"
         />
