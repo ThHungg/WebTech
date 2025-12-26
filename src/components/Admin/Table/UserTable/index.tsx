@@ -28,6 +28,8 @@ const UserTable = () => {
     queryFn: fetchAllUsers,
   });
 
+  // console.log("users", users);
+
   const handleSearch = (searchValue: string) => {
     setSearch(searchValue);
     setPage(1);
