@@ -33,7 +33,6 @@ const Header = () => {
     queryFn: fetchCategories,
   });
 
-  console.log("Categories in header:", categories);
 
   const menuList = categories
     ? categories?.data?.map((category: any) => ({
@@ -306,8 +305,9 @@ const Header = () => {
                     </svg>
                   </Link>
                 )}
-                <button
-                  onClick={() => setIsOpenCartSidebar(true)}
+                <Link
+                  href="/cart"
+                  // onClick={() => setIsOpenCartSidebar(true)}
                   className="p-2"
                 >
                   <svg
@@ -328,7 +328,7 @@ const Header = () => {
                       <circle cx="12" cy="27" r="2" />
                     </g>
                   </svg>
-                </button>
+                </Link>
               </div>
             </div>
           </div>

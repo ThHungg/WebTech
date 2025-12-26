@@ -12,12 +12,9 @@ const MasterLayout = ({
   children: React.ReactNode;
 }) => {
   const pathname = usePathname();
-  if (
-    pathname.startsWith("/admin") ||
-    pathname === "/auth" ||
-    pathname === "/profile" ||
-    pathname === "/checkout/payment-success"
-  ) {
+  
+  if (pathname.startsWith("/admin") || pathname === "/auth" || pathname === "/profile" || pathname === "/cart" ||  pathname === "/checkout/payment-success") {
+
     return <>{children}</>;
   }
   return (

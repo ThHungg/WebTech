@@ -14,7 +14,7 @@ const ListProductPage = ({
   const [limit, setLimit] = useState(12);
   const { category } = use(params);
   console.log("category", category);
-  const { data: products = {}, refetch } = useQuery({
+  const { data: products = {} } = useQuery({
     queryKey: ["products", category, page, limit],
     queryFn: () => productServices.getBySlug(category, page, limit),
   });

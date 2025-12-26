@@ -8,7 +8,8 @@ import formatVND from "@/utils/formatVND";
 import { memo, useState } from "react";
 import SpecialOffer from "../SpecialOffer";
 import { formatPercentage } from "@/utils/formatPercentage";
-
+import * as cartServices from "../../../services/cartServices"
+import { toast } from "react-toastify";
 const InforProduct = ({
   productDetail,
   selectVersion,
@@ -19,7 +20,18 @@ const InforProduct = ({
   setSelectVersion: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [quantity, setQuantity] = useState(1);
-
+  const handleAddToCart = async (product_variant_id: number, quantity: number) => {
+    try {
+      await cartServices.addItemsToCart(
+        product_variant_id,
+        quantity,
+      );
+      toast.success("Thêm vào giỏ hàng thành công");
+    } catch (error) {
+      console.log(error);
+      toast.error("Thêm vào giỏ hàng thất bại");
+    }
+  };
   return (
     <div className="p-[24px] rounded-xl shadow-lg w-full bg-white border-[1px] border-gray-200">
       {/* Thong tin san pham */}
@@ -68,7 +80,7 @@ const InforProduct = ({
             {productDetail?.avg_rating}
           </div>
           <span className="text-gray-300">|</span>
-          <p className="text-gray-600">127 đánh giá</p>
+          <p className="text-gray-600">{productDetail?.reviews?.length} đánh giá</p>
           <span className="text-gray-300">|</span>
           <p className="text-gray-600 flex items-center gap-2">
             <svg
@@ -384,7 +396,9 @@ const InforProduct = ({
       </div>
       {/* Thêm vào giỏ hàng & Mua ngay */}
       <div className="mb-[24px] space-y-3">
-        <AddToCart />
+        <AddToCart
+          onChange={() => handleAddToCart(productDetail?.variants[selectVersion]?.id, quantity)}
+        />
         <BuyNow />
       </div>
       {/* Chính sách bảo hành */}

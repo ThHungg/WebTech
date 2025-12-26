@@ -5,8 +5,24 @@ import "swiper/css";
 import "swiper/css/pagination";
 import FeaturedCard from "../../Card/FeaturedCard";
 import Link from "next/link";
+import * as productServices from "../../../services/productServices";
+import { useQuery } from "@tanstack/react-query";
 
 const FeaturedSection = () => {
+  const fetchAllProducts = async () => {
+    try {
+      const res = await productServices.getAllProducts();
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const {data: dataProducts =[]} = useQuery({
+    queryKey: ["dataProducts"],
+    queryFn: fetchAllProducts,
+  });
+  console.log("featuredProducts: ", dataProducts);
+      
   return (
     <div className="py-[64px]">
       <div className="container px-4">
@@ -18,7 +34,7 @@ const FeaturedSection = () => {
             </p>
           </div>
           <Link
-            href="/"
+            href="/listproduct"
             className="group flex items-center gap-1 text-[16px] font-semibold text-red-500 hover:text-red-600 "
           >
             Xem tất cả{" "}
@@ -49,33 +65,13 @@ const FeaturedSection = () => {
               0: { slidesPerView: 1 },
             }}
           >
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <FeaturedCard />
-            </SwiperSlide>
+            {dataProducts.map((product: any) => (
+              <SwiperSlide key={product?.id}>
+                <Link href={`/products/${product?.id}`}>
+                  <FeaturedCard dataProduct={product} />
+                </Link>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>
