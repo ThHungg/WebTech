@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import CartVoucher from "../CartVoucher";
 import formatVND from "@/utils/formatVND";
-import * as cartServices from "../../../services/cartServices";
-import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
@@ -13,10 +11,10 @@ const CartSummary = ({
   cartData: any;
   selected: any[];
 }) => {
+  console.log("summary ", selected);
+  
   const router = useRouter();
   const cartItems = cartData?.cart?.items || [];
-  const isAllSelected =
-    cartItems.length > 0 && selected.length === cartItems.length;
   // Lọc ra các sản phẩm có id nằm trong mảng selected
   const selectedItems = cartItems.filter((item: any) =>
     selected.includes(item?.id)
@@ -28,20 +26,12 @@ const CartSummary = ({
     0
   );
 
-  const handleCheckOut = async () => {
-  
+  const handleCheckOut = () => {
     if (selectedItems.length === 0) {
       toast.error("Vui lòng chọn sản phẩm trước khi thanh toán");
       return;
     }
-    try {
-      const cartItemIds = selectedItems.map((item: any) => item?.id);
-      await cartServices.selectCartItems(cartItemIds);
-      console.log("Đã chọn sản phẩm thành công");
-      router.push("/checkout");
-    } catch (error) {
-      console.error("Đã chọn sản phẩm thất bại", error);
-    }
+    router.push("/checkout");
   };
   return (
     <div className="bg-white p-4 rounded-xl sticky top-30 space-y-4 shadow-sm">
@@ -86,7 +76,8 @@ const CartSummary = ({
 
       <button
         onClick={handleCheckOut}
-        className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-red-600 to-orange-500 text-white py-3  font-bold hover:shadow-lg transition-all disabled:opacity-50  rounded-xl ">
+        className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-red-600 to-orange-500 text-white py-3  font-bold hover:shadow-lg transition-all disabled:opacity-50  rounded-xl "
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="1.5em"

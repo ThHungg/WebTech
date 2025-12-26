@@ -31,16 +31,12 @@ export const updateCart = async (cartItemId: number, quantity: number) => {
   return res.data;
 };
 // chọn 1 
-export const selectCartItem = async (cartItemId: number) => {
+export const selectCartItem = async (cartItemId: number, is_selected: boolean) => {
   const res = await axiosInstance.post(`/carts/selectItem/${cartItemId}`, {
-    is_selected: true});
+    is_selected});
   return res.data;
 };
-// chọn nhiều sản phẩm
-export const selectCartItems = async (cartItemIds: number[]) => {
-    const res  = await axiosInstance.post("/carts/select-multiple", {cartItemIds, is_selected: true})
-  return res.data;
-}
+
 // chọn tất cả
 export const selectAllCartItems = async () => {
   const res = await axiosInstance.put(`/carts/selectAll`);

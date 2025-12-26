@@ -183,16 +183,6 @@ const CheckoutForm = ({
       toast.error(e.response?.data?.message || "Đặt hàng thất bại");
     }
   };
-
-  const handleBack = async () => {
-    try {
-      await cartServices.unSelectAllCartItems();
-      router.push("/cart");
-    } catch (error) {
-      console.error("Lỗi khi hủy thanh toán:", error);
-      router.push("/cart");
-    }
-  };
   return (
     <div className="p-[24px] rounded-lg w-full bg-white rounded-md border-[1px] border-gray-100 shadow-md">
       <div className="flex justify-between items-center">
@@ -416,7 +406,7 @@ const CheckoutForm = ({
         <div className="flex gap-3 mt-[20px]">
           <button
             type="button"
-            onClick={handleBack}
+            onClick={() => {router.push("/cart");}}
             className="py-4 bg-white text-[16px] hover:bg-gray-50 text-gray-700 w-1/3 text-center font-bold rounded-2xl border border-gray-300 transition-all"
           >
             Quay lại

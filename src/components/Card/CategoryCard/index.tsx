@@ -1,14 +1,17 @@
+import getFullImg from "@/utils/getFullImg";
 import Link from "next/link";
 import { memo } from "react";
 
 const CategoryCard = ({ categoryData }: { categoryData: any }) => {  
+  console.log("brand", categoryData);
+  
   return (
     <div className="group m-4">
       <div className="bg-white rounded-3xl shadow-md transition-transform duration-200 group-hover:scale-105 group-hover:shadow-lg overflow-hidden mb-8 mt-5">
         <div className="aspect-[4/3] w-full">
           <img
-            src="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400"
-            alt=""
+            src={getFullImg(categoryData?.logo)}
+            alt={categoryData?.name}
             className="object-cover w-full h-full rounded-t-3xl group-hover:opacity-90"
           />
         </div>
@@ -20,7 +23,7 @@ const CategoryCard = ({ categoryData }: { categoryData: any }) => {
             Gaming, văn phòng, đồ họa
           </p>
           <div className="flex items-center text-red-600 group-hover:text-[#E7000B]">
-            <Link href={`/listproduct/${categoryData?.slug}`}>
+            <Link href={`/listproduct`}>
               <span className="font-medium">Khám phá ngay</span>
             </Link>
             <svg

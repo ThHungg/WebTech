@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useCallback } from "react";
+import React, { memo, useState, useEffect, useCallback, useRef } from "react";
 import CartItemList from "../CartItemList";
 import CartSummary from "../CartSummary";
 import * as cartServices from "../../../services/cartServices";
@@ -9,6 +9,17 @@ const CartCentent = ({ cartData }: { cartData: any }) => {
   const router = useRouter();
   const [localCartData, setLocalCartData] = useState(cartData);
   const [selected, setSelected] = useState<any[]>([]);
+  const selectAllTimeout = useRef<any>(null);
+  const itemTimeouts = useRef<any>({});
+  // lấy ra danh sách đã chọn trong cart
+  useEffect(() => {
+    if (localCartData?.cart?.items) {
+      const selectedIds = localCartData?.cart?.items
+        .filter((item: any) => item?.is_selected)
+        .map((item: any) => item?.id);
+      setSelected(selectedIds);
+    }
+  }, [localCartData]);
 
   useEffect(() => {
     setLocalCartData(cartData);
@@ -26,20 +37,55 @@ const CartCentent = ({ cartData }: { cartData: any }) => {
   const cartItems = localCartData?.cart?.items || [];
   const isAllSelected =
     cartItems.length > 0 && selected.length === cartItems.length;
+
   const handleSelectAll = () => {
-    if (isAllSelected) {
-      setSelected([]);
-    } else {
+    const isSelect = !isAllSelected;
+    // Optimistic update: Cập nhật UI ngay lập tức
+    if (isSelect) {
+      
       setSelected(cartItems.map((item: any) => item?.id));
+    } else {
+      setSelected([]);
     }
+
+    // Debounce API call
+    if (selectAllTimeout.current) {
+      clearTimeout(selectAllTimeout.current);
+    }
+    selectAllTimeout.current = setTimeout(async () => {
+      try {
+        if (isSelect) {
+          await cartServices.selectAllCartItems();
+        } else {
+          await cartServices.unSelectAllCartItems();
+        }
+      } catch (error) {
+        console.error("Select all failed", error);
+      }
+    }, 500);
   };
 
   const handleSelectItem = (id: any) => {
-    if (selected.includes(id)) {
-      setSelected(selected.filter((item: any) => item !== id));
+    const isSelected = selected.includes(id);
+    // Optimistic update
+    if (isSelected) {
+      setSelected((prev) => prev.filter((item: any) => item !== id));
     } else {
-      setSelected([...selected, id]);
+      setSelected((prev) => [...prev, id]);
     }
+
+    // Debounce API call per item
+    if (itemTimeouts.current[id]) {
+      clearTimeout(itemTimeouts.current[id]);
+    }
+    itemTimeouts.current[id] = setTimeout(async () => {
+      try {
+        await cartServices.selectCartItem(id, !isSelected);
+        delete itemTimeouts.current[id];
+      } catch (error) {
+        console.error("Select item failed", error);
+      }
+    }, 500);
   };
   const handleDeleteSelected = () => {
     if (selected.length === 0) {

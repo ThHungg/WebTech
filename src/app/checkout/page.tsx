@@ -18,7 +18,6 @@ const CheckoutPage = () => {
     phone: "",
     email: "",
     shipping_address:  "",
-    delivery_method: "",
     note: "",
     payment_method: "",
     voucher_code: "",
